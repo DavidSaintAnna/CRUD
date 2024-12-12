@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/icons8-list-32.png"> 
+  <title>Todo App</title>
+</head>
+<body>
+  <header>
+        <h1>Todo List</h1>
+  </header>
+
+  <main>
+    <form action="">
+      <label>
+        <input type="text" name="todo" placeholder="Add a todo...">
+      </label>
+      <button type="submit">Add</button>
+    </form>
+
+    <section class="filter">
+      <input type="text" placeholder="Search..." id="filterInput">
+      <select id="filterDropdown">
+        <option value="all">All</option>
+        <option value="completed">Completed</option>
+        <option value="incomplete">Incomplete</option>
+      </select>
+    </section>
+
+    <div>
+      <ol id="content"></ol>
+    </div>
+  </main>
+</body>
+</html>
