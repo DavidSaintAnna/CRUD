@@ -42,7 +42,7 @@ main {
 }
 
 form {
-  
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -50,6 +50,7 @@ form {
 
 #create-list {
     width: auto;
+    height: 100%;
     font-weight: bold;
     color: white;
     border: 0 none;
@@ -68,9 +69,20 @@ background-position: right 10% bottom 45%;
 background-repeat: no-repeat;
 }
 
+
+label {
+  height: 100%;
+}
+
+
+section {
+  height: 50px;
+}
+
 input[type="text"],
 #filter-dropdown {
     flex: 1; 
+    height: 100%;
     padding: 15px; 
     border: 1px solid #ccc; 
     border-radius: 3px; 
