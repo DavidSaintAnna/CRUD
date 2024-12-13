@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/icons8-list-32.png"> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/icons8-list-32.png"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+  <link rel="stylesheet" href="styles.css" />
   <title>Todo App</title>
 </head>
 <body>
@@ -12,11 +19,11 @@
   </header>
 
   <main>
-    <form action="">
+    <form id="todo-form" class="todo-form">
       <label>
-        <input type="text" name="todo" placeholder="Add a todo...">
+        <input type="text" name="todo" placeholder="Create...">
       </label>
-      <button type="submit">Add</button>
+      <button id="create-list">Add</button>
     </form>
 
     <section class="filter">
