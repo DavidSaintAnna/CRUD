@@ -48,8 +48,6 @@ form {
     justify-content: center;
 }
 
-
-
 #create-list {
     width: auto;
     font-weight: bold;
@@ -63,15 +61,16 @@ form {
     background-color: var(--silver--tree);
 }
 
-#filterInput {
-  width: 150px;
+#filter-input {
+width: 150px;
 background-image: url('images/icons8-search-26.png');
 background-position: right 10% bottom 45%;
 background-repeat: no-repeat;
 }
+
 input[type="text"],
-#filterDropdown {
-    flex: 1; /* Allow elements to grow proportionally */
+#filter-dropdown {
+    flex: 1; 
     padding: 15px; 
     border: 1px solid #ccc; 
     border-radius: 3px; 
@@ -89,7 +88,7 @@ input {
   width: 500px;
 }
 
-#filterInput {
+#filter-input {
   width: 450px;
 }
 }
