@@ -8,72 +8,75 @@
 
 :root {
   font-size: 62.5%;
-    --silver--tree: hsl(150, 50%, 60%);
-    --silver--sand:hsl(192, 16%, 94%);
-    --emerald:hsl(150, 52%, 51%);
-    --black: hsl(210, 29%, 25%);
+  --silver--tree: hsl(150, 50%, 60%);
+  --disable-color: hsl(150, 52%, 78%);
+  --silver--sand: hsl(192, 16%, 94%);
+  --emerald: hsl(150, 52%, 51%);
+  --black: hsl(210, 29%, 25%);
 }
 
-
 body {
-    width: 100vw;
-    height: 100vh;
-    background-color: var(--silver--sand);
-    font-family: "League Spartan", sans-serif;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--silver--sand);
+  font-family: "League Spartan", sans-serif;
 }
 
 header {
-    width: 100%;
-    margin-top: 20px;
-    display: flex;
-    font-size: 2.8rem;
-    justify-content: center;
-    height: 155px;
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  font-size: 2.8rem;
+  justify-content: center;
+  height: 155px;
 }
 
 main {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin: 0 auto;
 }
 
 form {
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #create-list {
-    width: auto;
-    height: 100%;
-    font-weight: bold;
-    color: white;
-    border: 0 none;
-    border-radius: 3px;
-    cursor: pointer;
-    padding: 15px 20px;
-    text-decoration: none;
-    font-size: 14px;
-    background-color: var(--silver--tree);
+  width: auto;
+  height: 100%;
+  font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 15px 20px;
+  text-decoration: none;
+  font-size: 14px;
+  background-color: var(--silver--tree);
+}
+
+#create-list:disabled {
+  background-color: var(--disable-color);
+  cursor: not-allowed;
 }
 
 #filter-input {
-width: 150px;
-background-image: url('images/icons8-search-26.png');
-background-position: right 10% bottom 45%;
-background-repeat: no-repeat;
+  width: 150px;
+  background-image: url("images/icons8-search-26.png");
+  background-position: right 10% bottom 45%;
+  background-repeat: no-repeat;
 }
-
 
 label {
   height: 100%;
 }
-
 
 section {
   height: 50px;
@@ -81,26 +84,50 @@ section {
 
 input[type="text"],
 #filter-dropdown {
-    flex: 1; 
-    height: 100%;
-    padding: 15px; 
-    border: 1px solid #ccc; 
-    border-radius: 3px; 
-    color: var(--black);
-    font-size: 13px;
-    box-sizing: border-box;
-    margin: 0; 
-    line-height: 1.5; 
+  flex: 1;
+  height: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  color: var(--black);
+  font-size: 13px;
+  box-sizing: border-box;
+  margin: 0;
+  line-height: 1.5;
+}
+#content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.todo-item {
+  background: var(--emerald);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 275px;
+  font-size: 18px;
+  color: var(--silver--sand);
 }
 
+#delete-todo-item {
+  margin-left: 5px;
+}
+.todo-item-content {
+}
 
 @media only screen and (min-width: 768px) {
+  input {
+    width: 500px;
+  }
 
-input {
-  width: 500px;
-}
-
-#filter-input {
-  width: 450px;
-}
+  #filter-input {
+    width: 450px;
+  }
 }
