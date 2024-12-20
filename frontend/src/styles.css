@@ -118,7 +118,24 @@ input[type="text"],
 
 #delete-todo-item {
   margin-left: 5px;
+  cursor: pointer;
 }
+
+#update-todo-item {
+  cursor: pointer;
+}
+
+.todo-item-content.editing {
+  border-bottom: 1px solid #ccc;
+  padding: 2px 4px;
+  outline: none;
+  min-width: 50px;
+}
+
+.todo-item-content.editing:focus {
+  border-bottom-color: var(--silver--sand);
+}
+
 .todo-item-content {
 }
 
