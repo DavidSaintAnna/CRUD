@@ -3,21 +3,47 @@ const btn = document.getElementById("create-list");
 const searchInput = document.getElementById("filter-input");
 const filterDropdown = document.getElementById("filter-dropdown");
 const listOfTodo = document.getElementById("content");
+const searchWord = document.getElementById("search-word");
+
+let todos = [];
 
 btn.disabled = true;
 
 inputCreate.addEventListener("input", () => {
   const value = inputCreate.value.trim();
-
   btn.disabled = value.length < 5;
 });
 
 btn.addEventListener("click", () => {
   const value = inputCreate.value.trim();
   if (value.length < 5) return;
-  listOfTodo.innerHTML += generateItem(value);
+  listOfTodo.innerHTML += createTodo(value);
   inputCreate.value = "";
 });
+
+function createTodo(description) {
+  const id = todos.length + 1;
+  const todo = { id, description, checked: false };
+  todos.push(todo);
+  const html = renderTodo(todo);
+  return html;
+}
+
+searchWord.addEventListener("click", () => {
+  const searchValue = searchInput.value.trim().toLowerCase();
+
+  const filteredTodos = todos.filter((todo) =>
+    todo.description.toLowerCase().includes(searchValue)
+  );
+  console.log(filteredTodos);
+});
+
+searchInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    searchWord.click();
+  }
+});
+
 listOfTodo.addEventListener("click", (event) => {
   if (event.target.classList.contains("fa-trash")) {
     const todoItem = event.target.closest(".todo-item");
@@ -67,10 +93,13 @@ listOfTodo.addEventListener("keydown", (event) => {
   }
 });
 
-function generateItem(value) {
+function renderTodo(todo) {
   return `
-    <li class="todo-item">
-      <span class="todo-item-content">${value}</span>
+    <li class="todo-item" data-id=${todo.id}>
+    <div class="todo-item-group">
+      <input type="checkbox" ${todo.checked ? "checked" : ""}>
+      <span class="todo-item-content">${todo.description}</span>
+    </div>
       <div>
         <i class="fa-solid fa-pen"></i>
         <i class="fa-solid fa-trash"></i>
