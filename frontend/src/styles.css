@@ -87,7 +87,7 @@ input[type="text"] {
   background-color: var(--silver--tree);
 }
 
-#create-list:disabled {
+#create-item:disabled {
   background-color: var(--disable-color);
   cursor: not-allowed;
 }
