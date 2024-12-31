@@ -121,30 +121,26 @@ searchInput$.addEventListener("keydown", (event) => {
 });
 
 /******* FUNÇÃO PARA FILTRAR TODOS (PELO STATUS)***********************************************************/
+function createTodosinView(todo) {
+  todo.forEach((todo) => {
+    const todoElement = createTodoTemplate(todo);
+    listOfTodo$.appendChild(todoElement);
+  });
+}
 
 filterDropdown$.addEventListener("change", (event) => {
   const selectValue = event.target.value;
+  let todosView = todos;
   listOfTodo$.innerHTML = "";
-  if (selectValue === "all") {
-    todos.forEach((todo) => {
-      const todoElement = createTodoTemplate(todo);
-      listOfTodo$.appendChild(todoElement);
-    });
-  }
+
   if (selectValue === "completed") {
-    const filteredTodos = todos.filter((todo) => todo.checked === true);
-    filteredTodos.forEach((todo) => {
-      const todoElement = createTodoTemplate(todo);
-      listOfTodo$.appendChild(todoElement);
-    });
+    todosView = todos.filter((todo) => todo.checked === true);
   }
   if (selectValue === "incomplete") {
-    const filteredTodos = todos.filter((todo) => todo.checked === false);
-    filteredTodos.forEach((todo) => {
-      const todoElement = createTodoTemplate(todo);
-      listOfTodo$.appendChild(todoElement);
-    });
+    todosView = todos.filter((todo) => todo.checked === false);
   }
+
+  createTodosinView(todosView);
 });
 
 /******* FUNÇÃO PARA ATUALIZAR TODOS***********************************************************/
