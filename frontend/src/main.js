@@ -6,7 +6,18 @@ const searchInput$ = document.getElementById("filter-input");
 const filterDropdown$ = document.getElementById("filter-dropdown");
 const listOfTodo$ = document.getElementById("content");
 const searchWord$ = document.getElementById("search-word");
-const todos = [];
+const todos = JSON.parse(localStorage.getItem("todos")) || [];
+
+function saveTodosToTheStorage() {
+  localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+function loadTodosFromStorage() {
+  const storedTodos = JSON.parse(localStorage.getItem("todos")) || [];
+  todos.length = 0;
+  todos.push(...storedTodos);
+  createTodosinView(todos);
+}
 
 /******* FUNÇÃO PARA HABILITAR CRIAÇÃO DO tODO ********************************************************************/
 
@@ -37,14 +48,14 @@ function createTodoTemplate(todo) {
   spanDescription.classList.add("todo-item-content");
   spanDescription.appendChild(document.createTextNode(todo.description));
   const divItems = document.createElement("div");
-  const pen = document.createElement("i");
-  pen.classList.add("fa-solid", "fa-pen");
-  const trash = document.createElement("i");
-  trash.classList.add("fa-solid", "fa-trash");
+  const penIcon = document.createElement("i");
+  penIcon.classList.add("fa-solid", "fa-pen");
+  const trashIcon = document.createElement("i");
+  trashIcon.classList.add("fa-solid", "fa-trash");
   divGroup.appendChild(input);
   divGroup.appendChild(spanDescription);
-  divItems.appendChild(pen);
-  divItems.appendChild(trash);
+  divItems.appendChild(penIcon);
+  divItems.appendChild(trashIcon);
   li.appendChild(divGroup);
   li.appendChild(divItems);
   //sempre de dentro pra fora no append
@@ -57,13 +68,17 @@ function createTodoTemplate(todo) {
   });
 
   //icone lixeira
-  trash.addEventListener("click", (event) => {
+  trashIcon.addEventListener("click", (event) => {
     const todoElement = event.target.parentElement.parentElement;
+    const todoId = todoElement.id;
+    const index = todos.findIndex((todo) => todo.id == todoId);
+    todos.splice(index, 1);
+    saveTodosToTheStorage();
     todoElement.remove();
   });
 
   //icone edição
-  pen.addEventListener("click", (event) => {
+  penIcon.addEventListener("click", (event) => {
     const todoElement = event.target.parentElement.parentElement;
     const iconPen = todoElement.querySelector(".fa-pen");
     const iconCheck = todoElement.querySelector(".fa-check");
@@ -77,6 +92,12 @@ function createTodoTemplate(todo) {
     } else {
       const newValue = todoContent.textContent.trim();
       if (newValue.length >= 5) {
+        const todoId = todoElement.id;
+        const todo = todos.find((arrayElement) => arrayElement.id == todoId);
+        if (todo) {
+          todo.description = newValue;
+          saveTodosToTheStorage();
+        }
         iconCheck.classList.remove("fa-check");
         iconCheck.classList.add("fa-pen");
         todoContent.contentEditable = false;
@@ -94,6 +115,7 @@ function createTodo(description) {
   const id = todos.length + 1;
   const todo = { id, description, checked: false };
   todos.push(todo);
+  saveTodosToTheStorage();
   const liElement = createTodoTemplate(todo);
   return liElement;
 }
@@ -151,4 +173,7 @@ function updateTodoStatus(checked, id) {
       todo.checked = checked;
     }
   });
+  saveTodosToTheStorage();
 }
+
+loadTodosFromStorage();
