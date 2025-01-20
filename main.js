@@ -6,6 +6,12 @@ const searchInput$ = document.getElementById("filter-input");
 const filterDropdown$ = document.getElementById("filter-dropdown");
 const listOfTodo$ = document.getElementById("content");
 const searchWord$ = document.getElementById("search-word");
+const form$ = document.querySelector("form");
+
+form$.addEventListener("submit", (event) => {
+  event.preventDefault();
+});
+
 const todos = JSON.parse(localStorage.getItem("todos")) || [];
 
 function saveTodosToTheStorage() {
