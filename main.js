@@ -12,6 +12,13 @@ form$.addEventListener("submit", (event) => {
   event.preventDefault();
 });
 
+const errorSpan = document.createElement("span");
+errorSpan.style.color = "red";
+errorSpan.style.fontSize = "1.5rem";
+errorSpan.style.display = "none";
+errorSpan.style.marginTop = "12px";
+inputCreate$.parentElement.appendChild(errorSpan);
+
 const todos = JSON.parse(localStorage.getItem("todos")) || [];
 
 function saveTodosToTheStorage() {
@@ -30,6 +37,19 @@ function loadTodosFromStorage() {
 inputCreate$.addEventListener("input", () => {
   const value = inputCreate$.value.trim();
   createItemBtn$.disabled = value.length < 5;
+});
+
+inputCreate$.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    const value = inputCreate$.value.trim();
+
+    if (value.length >= 5) {
+      createItemBtn$.click();
+    } else {
+      errorSpan.textContent = "at least 5 characters long!";
+      errorSpan.style.display = "block";
+    }
+  }
 });
 
 /******* FUNÇÃO PARA CRIAR OS TODOS INICIO ***************************************************************************/
