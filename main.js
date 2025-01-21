@@ -37,6 +37,12 @@ function loadTodosFromStorage() {
 inputCreate$.addEventListener("input", () => {
   const value = inputCreate$.value.trim();
   createItemBtn$.disabled = value.length < 5;
+  if (value.length < 5) {
+    errorSpan.textContent = "at least 5 characters long!";
+    errorSpan.style.display = "block";
+  } else {
+    errorSpan.style.display = "none";
+  }
 });
 
 inputCreate$.addEventListener("keydown", (event) => {
@@ -45,9 +51,6 @@ inputCreate$.addEventListener("keydown", (event) => {
 
     if (value.length >= 5) {
       createItemBtn$.click();
-    } else {
-      errorSpan.textContent = "at least 5 characters long!";
-      errorSpan.style.display = "block";
     }
   }
 });
