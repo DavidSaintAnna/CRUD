@@ -156,43 +156,43 @@ function createTodo(description) {
 
 /******* FUNÇÃO PARA FILTRAR TODOS (PELA PALAVRA)***********************************************************/
 
-searchWord$.addEventListener("click", () => {
-  const searchValue = searchInput$.value.trim().toLowerCase();
-  const filteredTodos = todos.filter((todo) =>
-    todo.description.toLowerCase().includes(searchValue)
-  );
+// searchWord$.addEventListener("click", () => {
+//   const searchValue = searchInput$.value.trim().toLowerCase();
+//   const filteredTodos = todos.filter((todo) =>
+//     todo.description.toLowerCase().includes(searchValue)
+//   );
 
-  listOfTodo$.innerHTML = "";
+//   listOfTodo$.innerHTML = "";
 
-  filteredTodos.forEach((todo) => {
-    const todoElement = createTodoTemplate(todo);
-    listOfTodo$.appendChild(todoElement);
-  });
-  console.log(filteredTodos);
-});
+//   filteredTodos.forEach((todo) => {
+//     const todoElement = createTodoTemplate(todo);
+//     listOfTodo$.appendChild(todoElement);
+//   });
+//   console.log(filteredTodos);
+// });
 
-searchInput$.addEventListener("input", () => {
-  const searchValue = searchInput$.value.trim().toLowerCase();
-  const filteredTodos = todos.filter((todo) =>
-    todo.description.toLowerCase().includes(searchValue)
-  );
+// searchInput$.addEventListener("input", () => {
+//   const searchValue = searchInput$.value.trim().toLowerCase();
+//   const filteredTodos = todos.filter((todo) =>
+//     todo.description.toLowerCase().includes(searchValue)
+//   );
 
-  if (filteredTodos.length === 0) {
-    errorSpan.textContent = "No words found!";
-    errorSpan.style.display = "block";
-    errorSpan.style.marginTop = "90px";
-  } else {
-    errorSpan.style.display = "none";
-  }
-});
+//   if (filteredTodos.length === 0) {
+//     errorSpan.textContent = "No words found!";
+//     errorSpan.style.display = "block";
+//     errorSpan.style.marginTop = "90px";
+//   } else {
+//     errorSpan.style.display = "none";
+//   }
+// });
 
-searchInput$.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    searchWord$.click();
-  }
-});
+// searchInput$.addEventListener("keydown", (event) => {
+//   if (event.key === "Enter") {
+//     searchWord$.click();
+//   }
+// });
 
-/******* FUNÇÃO PARA FILTRAR TODOS (PELO STATUS)***********************************************************/
+// /******* FUNÇÃO PARA FILTRAR TODOS (PELO STATUS)***********************************************************/
 function createTodosinView(todo) {
   todo.forEach((todo) => {
     const todoElement = createTodoTemplate(todo);
@@ -200,19 +200,60 @@ function createTodosinView(todo) {
   });
 }
 
-filterDropdown$.addEventListener("change", (event) => {
-  const selectValue = event.target.value;
-  let todosView = todos;
-  listOfTodo$.innerHTML = "";
+// filterDropdown$.addEventListener("change", (event) => {
+//   const selectValue = event.target.value;
+//   let todosView = todos;
+//   listOfTodo$.innerHTML = "";
+
+//   if (selectValue === "completed") {
+//     todosView = todos.filter((todo) => todo.checked === true);
+//   }
+//   if (selectValue === "incomplete") {
+//     todosView = todos.filter((todo) => todo.checked === false);
+//   }
+
+//   createTodosinView(todosView);
+// });
+
+function applyFilters() {
+  const searchValue = searchInput$.value.trim().toLowerCase();
+  const selectValue = filterDropdown$.value;
+  let filteredTodos = todos;
+
+  if (searchValue) {
+    filteredTodos = filteredTodos.filter((todo) =>
+      todo.description.toLowerCase().includes(searchValue)
+    );
+  }
 
   if (selectValue === "completed") {
-    todosView = todos.filter((todo) => todo.checked === true);
-  }
-  if (selectValue === "incomplete") {
-    todosView = todos.filter((todo) => todo.checked === false);
+    filteredTodos = filteredTodos.filter((todo) => todo.checked === true);
+  } else if (selectValue === "incomplete") {
+    filteredTodos = filteredTodos.filter((todo) => todo.checked === false);
   }
 
-  createTodosinView(todosView);
+  listOfTodo$.innerHTML = "";
+  createTodosinView(filteredTodos);
+
+  if (filteredTodos.length === 0) {
+    errorSpan.textContent = "No todos found!";
+    errorSpan.style.display = "block";
+    errorSpan.style.marginTop = "90px";
+  } else {
+    errorSpan.style.display = "none";
+  }
+}
+
+searchWord$.addEventListener("click", applyFilters);
+
+searchInput$.addEventListener("input", applyFilters);
+
+filterDropdown$.addEventListener("change", applyFilters);
+
+searchInput$.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    applyFilters();
+  }
 });
 
 /******* FUNÇÃO PARA ATUALIZAR TODOS***********************************************************/
