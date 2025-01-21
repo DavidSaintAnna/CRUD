@@ -33,12 +33,15 @@ function loadTodosFromStorage() {
 }
 
 /******* FUNÇÃO PARA HABILITAR CRIAÇÃO DO tODO ********************************************************************/
-
 inputCreate$.addEventListener("input", () => {
   const value = inputCreate$.value.trim();
   createItemBtn$.disabled = value.length < 5;
+
   if (value.length < 5) {
     errorSpan.textContent = "at least 5 characters long!";
+    errorSpan.style.display = "block";
+  } else if (value.length >= 19) {
+    errorSpan.textContent = "limit of characters reached!";
     errorSpan.style.display = "block";
   } else {
     errorSpan.style.display = "none";
@@ -63,6 +66,7 @@ createItemBtn$.addEventListener("click", () => {
   const todoElement = createTodo(value);
   listOfTodo$.appendChild(todoElement);
   inputCreate$.value = "";
+  errorSpan.style.display = "none";
 });
 function createTodoTemplate(todo) {
   const li = document.createElement("li");
@@ -141,8 +145,9 @@ function createTodoTemplate(todo) {
 }
 
 function createTodo(description) {
+  const limitedDescription = description.slice(0, 19);
   const id = todos.length + 1;
-  const todo = { id, description, checked: false };
+  const todo = { id, description: limitedDescription, checked: false };
   todos.push(todo);
   saveTodosToTheStorage();
   const liElement = createTodoTemplate(todo);
