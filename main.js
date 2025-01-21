@@ -244,8 +244,6 @@ function applyFilters() {
   }
 }
 
-searchWord$.addEventListener("click", applyFilters);
-
 searchInput$.addEventListener("input", applyFilters);
 
 filterDropdown$.addEventListener("change", applyFilters);
