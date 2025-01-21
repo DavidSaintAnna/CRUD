@@ -168,6 +168,22 @@ searchWord$.addEventListener("click", () => {
     const todoElement = createTodoTemplate(todo);
     listOfTodo$.appendChild(todoElement);
   });
+  console.log(filteredTodos);
+});
+
+searchInput$.addEventListener("input", () => {
+  const searchValue = searchInput$.value.trim().toLowerCase();
+  const filteredTodos = todos.filter((todo) =>
+    todo.description.toLowerCase().includes(searchValue)
+  );
+
+  if (filteredTodos.length === 0) {
+    errorSpan.textContent = "No words found!";
+    errorSpan.style.display = "block";
+    errorSpan.style.marginTop = "90px";
+  } else {
+    errorSpan.style.display = "none";
+  }
 });
 
 searchInput$.addEventListener("keydown", (event) => {
