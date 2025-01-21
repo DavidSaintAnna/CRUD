@@ -46,6 +46,7 @@ form {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 5px;
 }
 
 input[type="text"] {
@@ -137,8 +138,9 @@ label {
 }
 
 section {
-  display: flex;
   height: 100%;
+  display: flex;
+  gap: 5px;
 }
 
 #content {
