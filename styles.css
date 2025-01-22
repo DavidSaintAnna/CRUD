@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  border: 0;
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -85,15 +86,18 @@ header {
 
 main {
   width: 100%;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 30px;
   margin: 0 auto;
+  padding: 15px;
 }
 
 form {
+  width: 100%;
   height: 50px;
   display: flex;
   align-items: center;
@@ -102,6 +106,7 @@ form {
 }
 
 input[type="text"] {
+  width: 100%;
   flex: 1;
   height: 100%;
   padding: 15px;
@@ -127,7 +132,7 @@ input[type="text"] {
 }
 
 .create-item {
-  width: auto;
+  width: 138px;
   height: 100%;
   font-weight: bold;
   color: var(--white);
@@ -149,7 +154,7 @@ input[type="text"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 155px;
+  width: 100%;
   height: 100%;
   padding: 10px;
   border: 1px solid var(--gray);
@@ -185,10 +190,12 @@ input[type="text"] {
 }
 
 label {
+  width: 100%;
   height: 100%;
 }
 
 section {
+  width: 100%;
   height: 100%;
   display: flex;
   gap: 5px;
@@ -210,7 +217,7 @@ section {
   padding: 10px;
   border-radius: 5px;
   width: 100%;
-  max-width: 275px;
+  /* max-width: 275px; */
   font-size: 18px;
   color: var(--silver--sand);
 }
@@ -261,7 +268,7 @@ section {
   font-size: 15px;
 }
 
-@media only screen and (min-width: 768px) {
+/* @media only screen and (min-width: 768px) {
   input {
     width: 500px;
   }
@@ -272,4 +279,4 @@ section {
   #filter-input {
     width: 450px;
   }
-}
+} */
