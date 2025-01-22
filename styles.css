@@ -24,6 +24,7 @@ body {
   height: 100vh;
   background-color: var(--silver--sand);
   font-family: "League Spartan", sans-serif;
+  overflow: hidden;
 }
 
 header {
