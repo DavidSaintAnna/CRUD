@@ -6,6 +6,9 @@ const searchInput$ = document.getElementById("filter-input");
 const filterDropdown$ = document.getElementById("filter-dropdown");
 const listOfTodo$ = document.getElementById("content");
 const searchWord$ = document.getElementById("search-word");
+const modalContainer$ = document.getElementById("modal");
+const cancelDelete$ = document.getElementById("cancelDelete");
+const confirmDelete$ = document.getElementById("confirmDelete");
 const form$ = document.querySelector("form");
 
 form$.addEventListener("submit", (event) => {
@@ -100,14 +103,47 @@ function createTodoTemplate(todo) {
     updateTodoStatus(checked, id);
   });
 
-  //icone lixeira
+  // //icone lixeira
+  // trashIcon.addEventListener("click", (event) => {
+  //   const todoElement = event.target.parentElement.parentElement;
+  //   const todoId = todoElement.id;
+  //   const index = todos.findIndex((todo) => todo.id == todoId);
+  //   todos.splice(index, 1);
+  //   saveTodosToTheStorage();
+  //   todoElement.remove();
+  // });
+
+  let todoToDelete = null;
+
+  /******* MODAL E DELETE DOS TODOS***************************************************************************/
+
   trashIcon.addEventListener("click", (event) => {
-    const todoElement = event.target.parentElement.parentElement;
-    const todoId = todoElement.id;
-    const index = todos.findIndex((todo) => todo.id == todoId);
-    todos.splice(index, 1);
-    saveTodosToTheStorage();
-    todoElement.remove();
+    todoToDelete = event.target.parentElement.parentElement;
+    modalContainer$.style.display = "flex";
+  });
+
+  cancelDelete$.addEventListener("click", () => {
+    modalContainer$.style.display = "none";
+    todoToDelete = null;
+  });
+
+  confirmDelete$.addEventListener("click", () => {
+    if (todoToDelete) {
+      const todoId = todoToDelete.id;
+      const index = todos.findIndex((todo) => todo.id == todoId);
+      todos.splice(index, 1);
+      saveTodosToTheStorage();
+      todoToDelete.remove();
+      modalContainer$.style.display = "none";
+      todoToDelete = null;
+    }
+  });
+
+  modalContainer$.addEventListener("click", (event) => {
+    if (event.target === modalContainer$) {
+      modalContainer$.style.display = "none";
+      todoToDelete = null;
+    }
   });
 
   //icone edição
