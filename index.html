@@ -40,13 +40,15 @@
         <label>
           <input type="text" id="create" name="todo" placeholder="Create..." />
         </label>
-        <button id="create-item" type="button" disabled>Add</button>
+        <button id="create-item" class="create-item" type="button" disabled>
+          Add
+        </button>
       </form>
 
       <section>
         <div class="search-container">
           <input type="text" placeholder="Search..." id="filter-input" />
-          <button id="search-word"></button>
+          <button id="search-word" class="search-word"></button>
         </div>
         <select id="filter-dropdown">
           <option value="all">All</option>
@@ -54,7 +56,18 @@
           <option value="incomplete">Incomplete</option>
         </select>
       </section>
-      <ul id="content"></ul>
+      <ul id="content" class="content"></ul>
+      <div class="modal-container" id="modal">
+        <div class="modal">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <h2>Confirm Delete</h2>
+          <p>Are you sure you want to delete this todo?</p>
+          <div class="modal-buttons">
+            <button id="cancelDelete" class="cancelDelete">Cancel</button>
+            <button id="confirmDelete" class="confirmDelete">Delete</button>
+          </div>
+        </div>
+      </div>
     </main>
     <script src="/main.js"></script>
   </body>
