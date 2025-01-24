@@ -38,7 +38,13 @@
     <main>
       <form>
         <label>
-          <input type="text" id="create" name="todo" placeholder="Create..." />
+          <input
+            type="text"
+            id="create"
+            name="todo"
+            placeholder="Create..."
+            class="create-input"
+          />
         </label>
         <button id="create-item" class="create-item" type="button" disabled>
           Add
@@ -47,10 +53,15 @@
 
       <section>
         <div class="search-container">
-          <input type="text" placeholder="Search..." id="filter-input" />
+          <input
+            type="text"
+            placeholder="Search..."
+            id="filter-input"
+            class="filter-input"
+          />
           <button id="search-word" class="search-word"></button>
         </div>
-        <select id="filter-dropdown">
+        <select id="filter-dropdown" class="filter-dropdown">
           <option value="all">All</option>
           <option value="completed">Completed</option>
           <option value="incomplete">Incomplete</option>
