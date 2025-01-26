@@ -53,7 +53,7 @@ function handleTodoCreation() {
   const newTodo = { id: todos.length + 1, description: value.slice(0, 19), checked: false };
   todos.push(newTodo);
   saveTodos();
-  renderTodos(todos);
+  applyFilters(todos);
   $inputCreateTodo.value = "";
   $createTodoButton.disabled = true;
 }
@@ -99,7 +99,7 @@ function deleteTodo() {
   if (index !== -1) {
     todos.splice(index, 1);
     saveTodos();
-    renderTodos(todos);
+    applyFilters(todos);
   }
   closeModal();
 }
@@ -114,10 +114,11 @@ function showDeleteModal(todoElement) {
   $modalContainer.setAttribute("data-todo-id", todoElement.id);
 }
 
-function applyFilters() {
+function applyFilters(todoList) {
   const searchValue = $searchInput.value.trim().toLowerCase();
   const filterValue = $filterDropdown.value;
-  let filteredTodos = todos;
+
+  let filteredTodos = todoList instanceof Array ? todoList : todos;
 
   if (searchValue) {
     filteredTodos = filteredTodos.filter((todo) => todo.description.toLowerCase().includes(searchValue));
