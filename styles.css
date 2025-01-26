@@ -131,7 +131,8 @@ form {
 }
 
 .create-item {
-  min-width: 118px;
+  width: 118px;
+  flex-shrink: 0;
   height: 100%;
   font-weight: bold;
   color: var(--white);
