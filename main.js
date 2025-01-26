@@ -1,304 +1,219 @@
-/******* CONSTANTES ***************************************************************************/
+const $inputCreateTodo = document.getElementById("create");
+const $createTodoButton = document.getElementById("create-item");
+const $searchInput = document.getElementById("filter-input");
+const $filterDropdown = document.getElementById("filter-dropdown");
+const $todoList = document.getElementById("content");
+const $modalContainer = document.getElementById("modal");
+const $cancelDeleteButton = document.getElementById("cancel-delete");
+const $confirmDeleteButton = document.getElementById("confirm-delete");
+const $form = document.querySelector("form");
 
-const inputCreate$ = document.getElementById("create");
-const createItemBtn$ = document.getElementById("create-item");
-const searchInput$ = document.getElementById("filter-input");
-const filterDropdown$ = document.getElementById("filter-dropdown");
-const listOfTodo$ = document.getElementById("content");
-const searchWord$ = document.getElementById("search-word");
-const modalContainer$ = document.getElementById("modal");
-const cancelDelete$ = document.getElementById("cancelDelete");
-const confirmDelete$ = document.getElementById("confirmDelete");
-const form$ = document.querySelector("form");
+$form.addEventListener("submit", (event) => event.preventDefault());
 
-form$.addEventListener("submit", (event) => {
-  event.preventDefault();
-});
+const $formErrorMessage = document.createElement("span");
+$formErrorMessage.classList.add("error-message");
+$formErrorMessage.style.display = "none";
 
-const errorSpan = document.createElement("span");
-errorSpan.style.color = "red";
-errorSpan.style.fontSize = "1.5rem";
-errorSpan.style.display = "none";
-errorSpan.style.marginTop = "12px";
-inputCreate$.parentElement.appendChild(errorSpan);
+const $todosErrorMessage = document.createElement("span");
+$todosErrorMessage.classList.add("error-message");
+$todosErrorMessage.style.display = "none";
+
+$inputCreateTodo.parentElement.parentElement.appendChild($formErrorMessage);
 
 const todos = JSON.parse(localStorage.getItem("todos")) || [];
 
-function saveTodosToTheStorage() {
+function saveTodos() {
   localStorage.setItem("todos", JSON.stringify(todos));
 }
 
-function loadTodosFromStorage() {
-  const storedTodos = JSON.parse(localStorage.getItem("todos")) || [];
+function loadTodos() {
   todos.length = 0;
-  todos.push(...storedTodos);
-  createTodosinView(todos);
+  todos.push(...(JSON.parse(localStorage.getItem("todos")) || []));
+  renderTodos(todos);
 }
 
-/******* FUNÇÃO PARA HABILITAR CRIAÇÃO DO tODO ********************************************************************/
-inputCreate$.addEventListener("input", () => {
-  const value = inputCreate$.value.trim();
-  createItemBtn$.disabled = value.length < 5;
-
+function validateInput(value) {
   if (value.length < 5) {
-    errorSpan.textContent = "at least 5 characters long!";
-    errorSpan.style.display = "block";
-  } else if (value.length >= 19) {
-    errorSpan.textContent = "limit of characters reached!";
-    errorSpan.style.display = "block";
+    $formErrorMessage.textContent = "At least 5 characters required!";
+    $formErrorMessage.style.display = "block";
+    return false;
+  }
+  if (value.length > 19) {
+    $formErrorMessage.textContent = "Maximum 19 characters allowed!";
+    $formErrorMessage.style.display = "block";
+    return false;
+  }
+  $formErrorMessage.style.display = "none";
+  return true;
+}
+
+function handleTodoCreation() {
+  const value = $inputCreateTodo.value.trim();
+  if (!validateInput(value)) return;
+  const newTodo = { id: todos.length + 1, description: value.slice(0, 19), checked: false };
+  todos.push(newTodo);
+  saveTodos();
+  renderTodos(todos);
+  $inputCreateTodo.value = "";
+  $createTodoButton.disabled = true;
+}
+
+function updateTodoStatus(id, isChecked) {
+  const todo = todos.find((todo) => todo.id == id);
+  if (todo) {
+    todo.checked = isChecked;
+    saveTodos();
+  }
+}
+
+function editTodoContent(todoElement) {
+  const todoId = todoElement.id;
+  const todoContent = todoElement.querySelector(".todo-item-content");
+  const icon = todoElement.querySelector(".fa-pen, .fa-check");
+
+  if (icon.classList.contains("fa-pen")) {
+    icon.classList.replace("fa-pen", "fa-check");
+    todoContent.contentEditable = true;
+    todoContent.classList.add("editing");
+    todoContent.focus();
   } else {
-    errorSpan.style.display = "none";
-  }
-});
-
-inputCreate$.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    const value = inputCreate$.value.trim();
-
-    if (value.length >= 5) {
-      createItemBtn$.click();
-    }
-  }
-});
-
-/******* FUNÇÃO PARA CRIAR OS TODOS INICIO ***************************************************************************/
-
-createItemBtn$.addEventListener("click", () => {
-  const value = inputCreate$.value.trim();
-  if (value.length < 5) return;
-  const todoElement = createTodo(value);
-  listOfTodo$.appendChild(todoElement);
-  inputCreate$.value = "";
-  errorSpan.style.display = "none";
-});
-function createTodoTemplate(todo) {
-  const li = document.createElement("li");
-  li.classList.add("todo-item");
-  li.setAttribute("id", todo.id);
-  const divGroup = document.createElement("div");
-  divGroup.classList.add("todo-item-group");
-  const input = document.createElement("input");
-  input.setAttribute("type", "checkbox");
-  if (todo.checked) input.setAttribute("checked", todo.checked);
-  const spanDescription = document.createElement("span");
-  spanDescription.classList.add("todo-item-content");
-  spanDescription.appendChild(document.createTextNode(todo.description));
-  const divItems = document.createElement("div");
-  const penIcon = document.createElement("i");
-  penIcon.classList.add("fa-solid", "fa-pen");
-  const trashIcon = document.createElement("i");
-  trashIcon.classList.add("fa-solid", "fa-trash");
-  divGroup.appendChild(input);
-  divGroup.appendChild(spanDescription);
-  divItems.appendChild(penIcon);
-  divItems.appendChild(trashIcon);
-  li.appendChild(divGroup);
-  li.appendChild(divItems);
-  //sempre de dentro pra fora no append
-
-  //input checkbox
-  input.addEventListener("input", (event) => {
-    const checked = event.target.checked;
-    const id = event.target.parentElement.parentElement.id;
-    updateTodoStatus(checked, id);
-  });
-
-  // //icone lixeira
-  // trashIcon.addEventListener("click", (event) => {
-  //   const todoElement = event.target.parentElement.parentElement;
-  //   const todoId = todoElement.id;
-  //   const index = todos.findIndex((todo) => todo.id == todoId);
-  //   todos.splice(index, 1);
-  //   saveTodosToTheStorage();
-  //   todoElement.remove();
-  // });
-
-  let todoToDelete = null;
-
-  /******* MODAL E DELETE DOS TODOS***************************************************************************/
-
-  trashIcon.addEventListener("click", (event) => {
-    todoToDelete = event.target.parentElement.parentElement;
-    modalContainer$.style.display = "flex";
-  });
-
-  cancelDelete$.addEventListener("click", () => {
-    modalContainer$.style.display = "none";
-    todoToDelete = null;
-  });
-
-  confirmDelete$.addEventListener("click", () => {
-    if (todoToDelete) {
-      const todoId = todoToDelete.id;
-      const index = todos.findIndex((todo) => todo.id == todoId);
-      todos.splice(index, 1);
-      saveTodosToTheStorage();
-      todoToDelete.remove();
-      modalContainer$.style.display = "none";
-      todoToDelete = null;
-    }
-  });
-
-  modalContainer$.addEventListener("click", (event) => {
-    if (event.target === modalContainer$) {
-      modalContainer$.style.display = "none";
-      todoToDelete = null;
-    }
-  });
-
-  //icone edição
-  penIcon.addEventListener("click", (event) => {
-    const todoElement = event.target.parentElement.parentElement;
-    const iconPen = todoElement.querySelector(".fa-pen");
-    const iconCheck = todoElement.querySelector(".fa-check");
-    const todoContent = todoElement.querySelector(".todo-item-content");
-    if (iconPen) {
-      iconPen.classList.remove("fa-pen");
-      iconPen.classList.add("fa-check");
-      todoContent.contentEditable = true;
-      todoContent.focus();
-      todoContent.classList.add("editing");
-    } else {
-      const newValue = todoContent.textContent.trim();
-      if (newValue.length >= 5) {
-        const todoId = todoElement.id;
-        const todo = todos.find((arrayElement) => arrayElement.id == todoId);
-        if (todo) {
-          todo.description = newValue;
-          saveTodosToTheStorage();
-        }
-        iconCheck.classList.remove("fa-check");
-        iconCheck.classList.add("fa-pen");
-        todoContent.contentEditable = false;
-        todoContent.classList.remove("editing");
-      } else {
-        alert("Todo must be at least 5 characters long!");
-        todoContent.focus();
+    const updatedContent = todoContent.textContent.trim();
+    if (validateInput(updatedContent)) {
+      const todo = todos.find((todo) => todo.id == todoId);
+      if (todo) {
+        todo.description = updatedContent;
+        saveTodos();
       }
+      icon.classList.replace("fa-check", "fa-pen");
+      todoContent.contentEditable = false;
+      todoContent.classList.remove("editing");
+    } else {
+      todoContent.focus();
     }
-  });
-  return li;
+  }
 }
 
-function createTodo(description) {
-  const limitedDescription = description.slice(0, 19);
-  const id = todos.length + 1;
-  const todo = { id, description: limitedDescription, checked: false };
-  todos.push(todo);
-  saveTodosToTheStorage();
-  const liElement = createTodoTemplate(todo);
-  return liElement;
+function deleteTodo() {
+  const todoId = $modalContainer.getAttribute("data-todo-id");
+  const index = todos.findIndex((todo) => todo.id == todoId);
+  if (index !== -1) {
+    todos.splice(index, 1);
+    saveTodos();
+    renderTodos(todos);
+  }
+  closeModal();
 }
 
-/******* FUNÇÃO PARA FILTRAR TODOS (PELA PALAVRA)***********************************************************/
-
-// searchWord$.addEventListener("click", () => {
-//   const searchValue = searchInput$.value.trim().toLowerCase();
-//   const filteredTodos = todos.filter((todo) =>
-//     todo.description.toLowerCase().includes(searchValue)
-//   );
-
-//   listOfTodo$.innerHTML = "";
-
-//   filteredTodos.forEach((todo) => {
-//     const todoElement = createTodoTemplate(todo);
-//     listOfTodo$.appendChild(todoElement);
-//   });
-//   console.log(filteredTodos);
-// });
-
-// searchInput$.addEventListener("input", () => {
-//   const searchValue = searchInput$.value.trim().toLowerCase();
-//   const filteredTodos = todos.filter((todo) =>
-//     todo.description.toLowerCase().includes(searchValue)
-//   );
-
-//   if (filteredTodos.length === 0) {
-//     errorSpan.textContent = "No words found!";
-//     errorSpan.style.display = "block";
-//     errorSpan.style.marginTop = "90px";
-//   } else {
-//     errorSpan.style.display = "none";
-//   }
-// });
-
-// searchInput$.addEventListener("keydown", (event) => {
-//   if (event.key === "Enter") {
-//     searchWord$.click();
-//   }
-// });
-
-// /******* FUNÇÃO PARA FILTRAR TODOS (PELO STATUS)***********************************************************/
-function createTodosinView(todo) {
-  todo.forEach((todo) => {
-    const todoElement = createTodoTemplate(todo);
-    listOfTodo$.appendChild(todoElement);
-  });
+function closeModal() {
+  $modalContainer.style.display = "none";
+  $modalContainer.removeAttribute("data-todo-id");
 }
 
-// filterDropdown$.addEventListener("change", (event) => {
-//   const selectValue = event.target.value;
-//   let todosView = todos;
-//   listOfTodo$.innerHTML = "";
-
-//   if (selectValue === "completed") {
-//     todosView = todos.filter((todo) => todo.checked === true);
-//   }
-//   if (selectValue === "incomplete") {
-//     todosView = todos.filter((todo) => todo.checked === false);
-//   }
-
-//   createTodosinView(todosView);
-// });
+function showDeleteModal(todoElement) {
+  $modalContainer.style.display = "flex";
+  $modalContainer.setAttribute("data-todo-id", todoElement.id);
+}
 
 function applyFilters() {
-  const searchValue = searchInput$.value.trim().toLowerCase();
-  const selectValue = filterDropdown$.value;
+  const searchValue = $searchInput.value.trim().toLowerCase();
+  const filterValue = $filterDropdown.value;
   let filteredTodos = todos;
 
   if (searchValue) {
-    filteredTodos = filteredTodos.filter((todo) =>
-      todo.description.toLowerCase().includes(searchValue)
-    );
+    filteredTodos = filteredTodos.filter((todo) => todo.description.toLowerCase().includes(searchValue));
   }
 
-  if (selectValue === "completed") {
-    filteredTodos = filteredTodos.filter((todo) => todo.checked === true);
-  } else if (selectValue === "incomplete") {
-    filteredTodos = filteredTodos.filter((todo) => todo.checked === false);
+  if (filterValue === "completed") {
+    filteredTodos = filteredTodos.filter((todo) => todo.checked);
   }
 
-  listOfTodo$.innerHTML = "";
-  createTodosinView(filteredTodos);
+  if (filterValue === "incomplete") {
+    filteredTodos = filteredTodos.filter((todo) => !todo.checked);
+  }
+
+  renderTodos(filteredTodos);
 
   if (filteredTodos.length === 0) {
-    errorSpan.textContent = "No todos found!";
-    errorSpan.style.display = "block";
-    errorSpan.style.marginTop = "90px";
+    $todosErrorMessage.textContent = "No todos found!";
+    $todosErrorMessage.style.display = "block";
+    $todoList.appendChild($todosErrorMessage);
   } else {
-    errorSpan.style.display = "none";
+    $todosErrorMessage.style.display = "none";
   }
 }
 
-searchInput$.addEventListener("input", applyFilters);
+function createTodoElement(todo) {
+  const todoElement = document.createElement("li");
+  todoElement.classList.add("todo-item");
+  todoElement.id = todo.id;
 
-filterDropdown$.addEventListener("change", applyFilters);
+  const todoGroup = document.createElement("div");
+  todoGroup.classList.add("todo-item-group");
 
-searchInput$.addEventListener("keydown", (event) => {
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.checked = todo.checked;
+  checkbox.addEventListener("change", (event) => {
+    updateTodoStatus(todo.id, event.target.checked);
+    applyFilters();
+  });
+
+  const description = document.createElement("span");
+  description.classList.add("todo-item-content");
+  description.textContent = todo.description;
+
+  const actions = document.createElement("div");
+  const editIcon = document.createElement("i");
+  editIcon.classList.add("fa-solid", "fa-pen");
+  editIcon.addEventListener("click", () => editTodoContent(todoElement));
+
+  const deleteIcon = document.createElement("i");
+  deleteIcon.classList.add("fa-solid", "fa-trash");
+  deleteIcon.addEventListener("click", () => showDeleteModal(todoElement));
+
+  actions.append(editIcon, deleteIcon);
+  todoGroup.append(checkbox, description);
+  todoElement.append(todoGroup, actions);
+
+  return todoElement;
+}
+
+function renderTodos(todoList) {
+  $todoList.innerHTML = "";
+  todoList.forEach((todo) => {
+    const todoElement = createTodoElement(todo);
+    $todoList.appendChild(todoElement);
+  });
+}
+
+$inputCreateTodo.addEventListener("input", () => {
+  $createTodoButton.disabled = !validateInput($inputCreateTodo.value.trim());
+});
+
+$inputCreateTodo.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && !$createTodoButton.disabled) {
+    handleTodoCreation();
+  }
+});
+
+$createTodoButton.addEventListener("click", handleTodoCreation);
+
+$searchInput.addEventListener("input", applyFilters);
+$searchInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     applyFilters();
   }
 });
 
-/******* FUNÇÃO PARA ATUALIZAR TODOS***********************************************************/
+$filterDropdown.addEventListener("change", applyFilters);
 
-function updateTodoStatus(checked, id) {
-  todos.forEach((todo) => {
-    if (todo.id == id) {
-      todo.checked = checked;
-    }
-  });
-  saveTodosToTheStorage();
-}
+$cancelDeleteButton.addEventListener("click", closeModal);
+$confirmDeleteButton.addEventListener("click", deleteTodo);
 
-loadTodosFromStorage();
+$modalContainer.addEventListener("click", (event) => {
+  if (event.target === $modalContainer) {
+    closeModal();
+  }
+});
+
+loadTodos();
