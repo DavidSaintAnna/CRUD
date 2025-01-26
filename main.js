@@ -7,8 +7,8 @@ const filterDropdown$ = document.getElementById("filter-dropdown");
 const listOfTodo$ = document.getElementById("content");
 const searchWord$ = document.getElementById("search-word");
 const modalContainer$ = document.getElementById("modal");
-const cancelDelete$ = document.getElementById("cancelDelete");
-const confirmDelete$ = document.getElementById("confirmDelete");
+const cancelDelete$ = document.getElementById("cancel-delete");
+const confirmDelete$ = document.getElementById("confirm-delete");
 const form$ = document.querySelector("form");
 
 form$.addEventListener("submit", (event) => {
