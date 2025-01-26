@@ -107,7 +107,7 @@ form {
 
 .create-input {
   width: 100%;
-  height: 100%;
+  height: 50px;
   padding: 15px;
   border: 1px solid var(--gray);
   border-radius: 3px;
@@ -119,7 +119,7 @@ form {
 }
 
 .filter-dropdown {
-  height: 48px;
+  height: 50px;
   padding: 15px;
   border: 1px solid var(--gray);
   border-radius: 3px;
@@ -131,7 +131,7 @@ form {
 }
 
 .create-item {
-  width: 161px;
+  min-width: 118px;
   height: 100%;
   font-weight: bold;
   color: var(--white);
@@ -265,10 +265,4 @@ section {
 .modal > p {
   margin-top: 10px;
   font-size: 15px;
-}
-
-@media only screen and (min-width: 768px) {
-  .create-item {
-    width: 138px;
-  }
 }
