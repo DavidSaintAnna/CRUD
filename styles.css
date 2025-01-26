@@ -20,21 +20,63 @@
   --black: hsl(210, 29%, 25%);
 }
 
+header {
+  width: 100%;
+  margin-top: 20px;
+  font-size: 2.8rem;
+  margin-bottom: 40px;
+}
+
 body {
   width: 100vw;
   height: 100vh;
+  max-width: 80vw;
+  justify-self: center;
   background-color: var(--silver--sand);
   font-family: "League Spartan", sans-serif;
   overflow: hidden;
 }
+main {
+  padding: 15px;
+}
 
-header {
-  width: 100%;
-  margin-top: 20px;
+body,
+main,
+form,
+.search-container,
+header,
+.modal-buttons,
+.todo-item,
+.content,
+section,
+.row,
+.todo-item-group {
   display: flex;
-  font-size: 2.8rem;
+}
+
+.search-container,
+.content,
+.modal-container,
+.todo-item {
+  align-items: center;
+}
+
+.modal-buttons,
+.modal-container,
+header {
   justify-content: center;
-  height: 155px;
+}
+
+.todo-item,
+.search-container {
+  justify-content: space-between;
+}
+
+body,
+main,
+.content,
+form {
+  flex-direction: column;
 }
 
 .modal-container {
@@ -45,8 +87,6 @@ header {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  align-items: center;
-  justify-content: center;
   z-index: 1;
 }
 
@@ -61,110 +101,73 @@ header {
 
 .modal-buttons {
   margin-top: 20px;
-  display: flex;
-  justify-content: center;
   gap: 10px;
 }
+select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='currentColor' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 95%;
+  background-position-y: 50%;
+  appearance: none;
+}
 
-.cancelDelete,
-.confirmDelete {
+.cancel-delete,
+.confirm-delete,
+.create-item {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-}
-
-.cancelDelete {
-  background: var(--cancel);
-  color: var(--white);
-}
-
-.confirmDelete {
-  background: var(--delete);
-  color: var(--white);
-}
-
-main {
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  margin: 0 auto;
-  padding: 15px;
-}
-
-form {
-  width: 100%;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-
-.create-input {
-  width: 100%;
-  height: 50px;
-  padding: 15px;
-  border: 1px solid var(--gray);
-  border-radius: 3px;
-  color: var(--black);
-  font-size: 13px;
-  box-sizing: border-box;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.filter-dropdown {
-  height: 50px;
-  padding: 15px;
-  border: 1px solid var(--gray);
-  border-radius: 3px;
-  color: var(--black);
-  font-size: 13px;
-  box-sizing: border-box;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.create-item {
-  width: 118px;
-  flex-shrink: 0;
-  height: 100%;
   font-weight: bold;
   color: var(--white);
-  border: 0 none;
-  border-radius: 3px;
-  cursor: pointer;
-  padding: 15px 20px;
   text-decoration: none;
-  font-size: 14px;
-  background-color: var(--silver--tree);
+  text-align: center;
 }
 
+.cancel-delete {
+  background: var(--cancel);
+}
+
+.confirm-delete {
+  background: var(--delete);
+}
+
+.error-message {
+  color: red;
+  font-size: 1.5rem;
+}
+form {
+  flex-wrap: wrap;
+  min-height: 80px;
+}
+
+.create-input,
+.filter-dropdown,
+.search-container {
+  background-color: var(--white);
+  width: 100%;
+  height: 48px;
+  padding: 15px;
+  border: 1px solid var(--gray);
+  border-radius: 3px;
+  color: var(--black);
+  font-size: 13px;
+}
+.create-item,
+.filter-dropdown {
+  width: 118px;
+  flex-shrink: 0;
+  height: 48px;
+}
+.create-item {
+  filter: saturate(2.5);
+  background-color: var(--silver--tree);
+  font-size: 14px;
+  height: 48px;
+}
 .create-item:disabled {
   background-color: var(--disable-color);
   cursor: not-allowed;
-}
-
-.search-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-  border: 1px solid var(--gray);
-  background-color: var(--white);
-  border-radius: 3px;
-  color: var(--black);
-  font-size: 13px;
-  box-sizing: border-box;
-  margin: 0;
-  line-height: 1.5;
 }
 
 .filter-input {
@@ -176,60 +179,38 @@ form {
 }
 
 .search-word {
-  border: transparent;
-  min-width: 26px;
   width: 26px;
   height: 26px;
-  background: none;
-  background-image: url("images/icons8-search-26.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  flex-shrink: 0;
+  background: url("images/icons8-search-26.png") no-repeat center / contain;
   margin-left: 4px;
+  flex-shrink: 0;
 }
-
-label {
-  width: 100%;
-  height: 100%;
-}
-
 section {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  gap: 5px;
+  margin-bottom: 15px;
 }
-
+label,
+section,
+form,
+.row,
 .content {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 10px;
 }
+.content {
+  margin-top: 15px;
+  overflow: auto;
+  max-height: 69vh;
+  padding-right: 5px;
+  padding-bottom: 20px;
+}
+
 .todo-item {
   background: var(--emerald);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 10px;
   border-radius: 5px;
   width: 100%;
-  /* max-width: 275px; */
   font-size: 18px;
   color: var(--silver--sand);
-}
-
-.todo-item-content.editing {
-  border-bottom: 1px solid var(--gray);
-  outline: none;
-  min-width: 100px;
-}
-
-.todo-item-content.editing:focus {
-  border-bottom-color: var(--silver--sand);
 }
 
 .todo-item-content {
@@ -237,9 +218,17 @@ section {
   white-space: nowrap;
 }
 
+.todo-item-content.editing {
+  border-bottom: 1px solid var(--gray);
+  outline: none;
+}
+
+.todo-item-content.editing:focus {
+  border-bottom-color: var(--silver--sand);
+}
+
 .todo-item-group {
   width: 25%;
-  display: flex;
   gap: 15px;
 }
 
@@ -247,23 +236,26 @@ section {
   transform: scale(1);
 }
 
-.fa-solid.fa-trash {
-  margin-left: 8px;
-  cursor: pointer;
-}
+.fa-solid.fa-trash,
 .fa-solid.fa-pen,
 .fa-solid.fa-check {
+  cursor: pointer;
+}
+.fa-solid.fa-trash {
+  margin-left: 12px;
+  margin-right: 4px;
   cursor: pointer;
 }
 .fa-solid.fa-circle-exclamation {
   font-size: 60px;
   color: var(--delete);
 }
-.modal > h2 {
+
+.modal > h2,
+.modal > p {
   margin-top: 10px;
 }
 
 .modal > p {
-  margin-top: 10px;
   font-size: 15px;
 }
