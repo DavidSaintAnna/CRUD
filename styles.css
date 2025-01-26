@@ -131,7 +131,7 @@ form {
 }
 
 .create-item {
-  width: 138px;
+  width: 161px;
   height: 100%;
   font-weight: bold;
   color: var(--white);
@@ -267,15 +267,8 @@ section {
   font-size: 15px;
 }
 
-/* @media only screen and (min-width: 768px) {
-  input {
-    width: 500px;
+@media only screen and (min-width: 768px) {
+  .create-item {
+    width: 138px;
   }
-  .search-container {
-    width: 450px;
-  }
-
-  #filter-input {
-    width: 450px;
-  }
-} */
+}
