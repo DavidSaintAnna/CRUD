@@ -161,10 +161,12 @@ function createTodoTemplate(todo) {
     } else {
       const newValue = todoContent.textContent.trim();
       if (newValue.length >= 5) {
+        const limitedValue = newValue.slice(0, 19);
         const todoId = todoElement.id;
         const todo = todos.find((arrayElement) => arrayElement.id == todoId);
         if (todo) {
-          todo.description = newValue;
+          todo.description = limitedValue;
+          todoContent.textContent = limitedValue;
           saveTodosToTheStorage();
         }
         iconCheck.classList.remove("fa-check");
