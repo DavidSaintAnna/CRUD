@@ -21,8 +21,8 @@
 }
 
 body {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: var(--silver--sand);
   font-family: "League Spartan", sans-serif;
 }
@@ -60,7 +60,6 @@ header {
   justify-content: center;
   z-index: 1;
 }
-
 .modal {
   background: var(--white);
   padding: 20px;
@@ -206,10 +205,7 @@ section {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow-y: auto;
-
   gap: 10px;
-  padding-right: 5px;
 }
 .todo-item {
   background: var(--emerald);
@@ -273,7 +269,7 @@ section {
 .error-span {
   display: none;
   color: red;
-  font-size: 1.5rem;
+  font-size: 1.9rem;
   margin-top: 12px;
 }
 
