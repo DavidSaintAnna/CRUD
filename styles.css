@@ -25,7 +25,18 @@ body {
   height: 100vh;
   background-color: var(--silver--sand);
   font-family: "League Spartan", sans-serif;
-  overflow: hidden;
+}
+
+main {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin: 0 auto;
+  padding: 15px;
 }
 
 header {
@@ -66,34 +77,22 @@ header {
   gap: 10px;
 }
 
-.cancelDelete,
-.confirmDelete {
+.cancel-delete,
+.confirm-delete {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.cancelDelete {
+.cancel-delete {
   background: var(--cancel);
   color: var(--white);
 }
 
-.confirmDelete {
+.confirm-delete {
   background: var(--delete);
   color: var(--white);
-}
-
-main {
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  margin: 0 auto;
-  padding: 15px;
 }
 
 form {
@@ -207,7 +206,10 @@ section {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow-y: auto;
+
   gap: 10px;
+  padding-right: 5px;
 }
 .todo-item {
   background: var(--emerald);
