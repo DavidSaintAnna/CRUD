@@ -71,6 +71,7 @@ createItemBtn$.addEventListener("click", () => {
   createTodo(value);
   listOfTodo$.appendChild(todoElement);
   inputCreate$.value = "";
+  createItemBtn$.disabled = true;
   errorSpan.classList.remove("error-span--visible");
 });
 function createTodoTemplate(todo) {
