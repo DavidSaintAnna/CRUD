@@ -68,10 +68,10 @@ inputCreate$.addEventListener("keydown", (event) => {
 createItemBtn$.addEventListener("click", () => {
   const value = inputCreate$.value.trim();
   if (value.length < 5) return;
-  const todoElement = createTodo(value);
+  createTodo(value);
   listOfTodo$.appendChild(todoElement);
   inputCreate$.value = "";
-  errorSpanCreate.style.display = "none";
+  errorSpan.classList.remove("error-span--visible");
 });
 function createTodoTemplate(todo) {
   const li = document.createElement("li");
@@ -190,8 +190,7 @@ function createTodo(description) {
   const todo = { id, description: limitedDescription, checked: false };
   todos.push(todo);
   saveTodosToTheStorage();
-  const liElement = createTodoTemplate(todo);
-  return liElement;
+  applyFilters();
 }
 
 /******* FUNÇÃO PARA FILTRAR TODOS (PELA PALAVRA)***********************************************************/
@@ -302,6 +301,7 @@ function updateTodoStatus(checked, id) {
     }
   });
   saveTodosToTheStorage();
+  applyFilters();
 }
 
 loadTodosFromStorage();
