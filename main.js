@@ -69,7 +69,6 @@ createItemBtn$.addEventListener("click", () => {
   const value = inputCreate$.value.trim();
   if (value.length < 5) return;
   createTodo(value);
-  listOfTodo$.appendChild(todoElement);
   inputCreate$.value = "";
   createItemBtn$.disabled = true;
   errorSpan.classList.remove("error-span--visible");
