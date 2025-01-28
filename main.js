@@ -15,12 +15,14 @@ form$.addEventListener("submit", (event) => {
   event.preventDefault();
 });
 
-const errorSpan = document.createElement("span");
-errorSpan.style.color = "red";
-errorSpan.style.fontSize = "1.5rem";
-errorSpan.style.display = "none";
-errorSpan.style.marginTop = "12px";
-inputCreate$.parentElement.appendChild(errorSpan);
+const errorSpanCreate = document.createElement("span");
+errorSpanCreate.classList.add("error-span");
+inputCreate$.parentElement.appendChild(errorSpanCreate);
+const errorSpanSearch = document.createElement("span");
+errorSpanSearch.classList.add("error-span");
+searchInput$.parentElement.parentElement.parentElement.appendChild(
+  errorSpanSearch
+);
 
 const todos = JSON.parse(localStorage.getItem("todos")) || [];
 
@@ -41,13 +43,13 @@ inputCreate$.addEventListener("input", () => {
   createItemBtn$.disabled = value.length < 5;
 
   if (value.length < 5) {
-    errorSpan.textContent = "at least 5 characters long!";
-    errorSpan.style.display = "block";
+    errorSpanCreate.textContent = "at least 5 characters long!";
+    errorSpanCreate.classList.add("error-span-visible");
   } else if (value.length >= 19) {
-    errorSpan.textContent = "limit of characters reached!";
-    errorSpan.style.display = "block";
+    errorSpanCreate.textContent = "limit of characters reached!";
+    errorSpanCreate.classList.add("error-span-visible");
   } else {
-    errorSpan.style.display = "none";
+    errorSpanCreate.classList.remove("error-span-visible");
   }
 });
 
@@ -69,7 +71,7 @@ createItemBtn$.addEventListener("click", () => {
   const todoElement = createTodo(value);
   listOfTodo$.appendChild(todoElement);
   inputCreate$.value = "";
-  errorSpan.style.display = "none";
+  errorSpanCreate.style.display = "none";
 });
 function createTodoTemplate(todo) {
   const li = document.createElement("li");
@@ -274,11 +276,10 @@ function applyFilters() {
   createTodosinView(filteredTodos);
 
   if (filteredTodos.length === 0) {
-    errorSpan.textContent = "No todos found!";
-    errorSpan.style.display = "block";
-    errorSpan.style.marginTop = "90px";
+    errorSpanSearch.textContent = "No todos found!";
+    errorSpanSearch.classList.add("error-span-visible");
   } else {
-    errorSpan.style.display = "none";
+    errorSpanSearch.classList.remove("error-span-visible");
   }
 }
 
