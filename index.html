@@ -37,36 +37,27 @@
 
     <main>
       <form>
-        <label>
+        <section class="input-buttons">
           <input
             type="text"
             id="create"
             name="todo"
-            placeholder="Create..."
+            placeholder="Add new task"
             class="create-input"
           />
-        </label>
-        <button id="create-item" class="create-item" type="button" disabled>
-          Add
-        </button>
+          <button id="create-item" class="action-icons" type="button" disabled>
+            <i class="fa-solid fa-plus"></i>
+          </button>
+          <button id="search-word" class="action-icons">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </section>
+        <section id="filter-buttons" class="filter-buttons">
+          <button id="all" class="filter-button">All</button>
+          <button id="pending" class="filter-button">Pending</button>
+          <button id="done" class="filter-button">Done</button>
+        </section>
       </form>
-
-      <section>
-        <div class="search-container">
-          <input
-            type="text"
-            placeholder="Search..."
-            id="filter-input"
-            class="filter-input"
-          />
-          <button id="search-word" class="search-word"></button>
-        </div>
-        <select id="filter-dropdown" class="filter-dropdown">
-          <option value="all">All</option>
-          <option value="completed">Completed</option>
-          <option value="incomplete">Incomplete</option>
-        </select>
-      </section>
       <ul id="content" class="content"></ul>
       <div class="modal-container" id="modal">
         <div class="modal">
