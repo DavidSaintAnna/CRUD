@@ -40,7 +40,7 @@
         <section class="input-buttons">
           <input
             type="text"
-            id="create"
+            id="input-text"
             name="todo"
             placeholder="Add new task"
             class="create-input"
@@ -48,14 +48,17 @@
           <button id="create-item" class="action-icons" type="button" disabled>
             <i class="fa-solid fa-plus"></i>
           </button>
-          <button id="search-word" class="action-icons">
+          <button id="search-word" class="action-icons" type="button" disabled>
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </section>
+        <span id="error-span"></span>
         <section id="filter-buttons" class="filter-buttons">
-          <button id="all" class="filter-button">All</button>
-          <button id="pending" class="filter-button">Pending</button>
-          <button id="done" class="filter-button">Done</button>
+          <button id="all" class="filter-button" type="button">All</button>
+          <button id="pending" class="filter-button" type="button">
+            Pending
+          </button>
+          <button id="done" class="filter-button" type="button">Done</button>
         </section>
       </form>
       <ul id="content" class="content"></ul>
