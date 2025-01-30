@@ -16,6 +16,7 @@
   --emerald: hsl(170, 50%, 75%);
   --cyan-green: hsla(180, 39%, 82%, 0.2);
   --tree-cyan: hsla(180, 39%, 82%, 1);
+  --orange: hsla(21, 96%, 43%, 1);
   --delete: hsl(48, 93%, 53%);
   --white: hsl(0, 0%, 100%);
   --gray: hsl(0, 0%, 80%);
@@ -100,7 +101,7 @@ header {
 
 form {
   width: 100%;
-  height: 140px;
+  height: 154px;
   border: 1px solid var(--silver--tree);
   border-radius: 8px;
   padding: 20px;
@@ -128,7 +129,7 @@ form {
 .action-icons {
   width: 40px;
   border-radius: 8px;
-  background-color: var(--disable-color);
+  background-color: var(--silver--tree);
   color: var(--silver--sand);
   font-size: 20px;
 }
@@ -162,9 +163,14 @@ form {
   color: var(--placeholder-green);
 }
 
-.create-item:disabled {
+.action-icons:disabled {
   background-color: var(--disable-color);
   cursor: not-allowed;
+}
+
+.btn-filter-active {
+  background-color: var(--silver--tree);
+  color: var(--white);
 }
 
 .content {
@@ -184,7 +190,6 @@ form {
   padding: 20px 10px;
   border-radius: 8px;
   width: 100%;
-  /* max-width: 275px; */
   font-size: 18px;
   font-weight: 800;
   box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.25);
@@ -217,7 +222,7 @@ form {
 }
 
 .fa-solid.fa-trash {
-  margin-left: 8px;
+  margin-left: 20px;
   cursor: pointer;
 }
 .fa-solid.fa-pen,
@@ -239,9 +244,16 @@ form {
 
 .error-span {
   display: none;
-  color: hsla(21, 96%, 43%, 1);
-  font-size: 1.5rem;
-  margin-top: 12px;
+  color: var(--orange);
+  font-size: 1.1rem;
+  margin-top: 2px;
+}
+
+.error-span-content {
+  display: none;
+  color: var(--orange);
+  font-size: 2.4rem;
+  margin-top: 2px;
 }
 
 .error-span-visible {
