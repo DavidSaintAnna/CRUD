@@ -1,28 +1,27 @@
 /******* CONSTANTES ***************************************************************************/
 
-const inputCreate$ = document.getElementById("create");
+const inputText$ = document.getElementById("input-text");
 const createItemBtn$ = document.getElementById("create-item");
-const searchInput$ = document.getElementById("filter-input");
-const filterDropdown$ = document.getElementById("filter-dropdown");
-const listOfTodo$ = document.getElementById("content");
 const searchWord$ = document.getElementById("search-word");
+const listOfTodo$ = document.getElementById("content");
 const modalContainer$ = document.getElementById("modal");
 const cancelDelete$ = document.getElementById("cancel-delete");
+const btnFilterAll$ = document.getElementById("all");
+const btnFilterPending$ = document.getElementById("pending");
+const btnFilterDone$ = document.getElementById("done");
 const confirmDelete$ = document.getElementById("confirm-delete");
+const errorSpan$ = document.getElementById("error-span");
 const form$ = document.querySelector("form");
 
 form$.addEventListener("submit", (event) => {
   event.preventDefault();
 });
 
-const errorSpanCreate = document.createElement("span");
-errorSpanCreate.classList.add("error-span");
-inputCreate$.parentElement.appendChild(errorSpanCreate);
+errorSpan$.classList.add("error-span");
+
 const errorSpanSearch = document.createElement("span");
-errorSpanSearch.classList.add("error-span");
-searchInput$.parentElement.parentElement.parentElement.appendChild(
-  errorSpanSearch
-);
+errorSpanSearch.classList.add("error-span-content");
+errorSpan$.parentElement.parentElement.appendChild(errorSpanSearch);
 
 const todos = JSON.parse(localStorage.getItem("todos")) || [];
 
@@ -38,24 +37,25 @@ function loadTodosFromStorage() {
 }
 
 /******* FUNÇÃO PARA HABILITAR CRIAÇÃO DO tODO ********************************************************************/
-inputCreate$.addEventListener("input", () => {
-  const value = inputCreate$.value.trim();
+inputText$.addEventListener("input", () => {
+  const value = inputText$.value.trim();
   createItemBtn$.disabled = value.length < 5;
+  searchWord$.disabled = todos.length === 0;
 
   if (value.length < 5) {
-    errorSpanCreate.textContent = "at least 5 characters long!";
-    errorSpanCreate.classList.add("error-span-visible");
+    errorSpan$.textContent = "this field must have at least 5 characters!";
+    errorSpan$.classList.add("error-span-visible");
   } else if (value.length >= 19) {
-    errorSpanCreate.textContent = "limit of characters reached!";
-    errorSpanCreate.classList.add("error-span-visible");
+    errorSpan$.textContent = "limit of characters reached!";
+    errorSpan$.classList.add("error-span-visible");
   } else {
-    errorSpanCreate.classList.remove("error-span-visible");
+    errorSpan$.classList.remove("error-span-visible");
   }
 });
 
-inputCreate$.addEventListener("keydown", (event) => {
+inputText$.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
-    const value = inputCreate$.value.trim();
+    const value = inputText$.value.trim();
 
     if (value.length >= 5) {
       createItemBtn$.click();
@@ -66,12 +66,12 @@ inputCreate$.addEventListener("keydown", (event) => {
 /******* FUNÇÃO PARA CRIAR OS TODOS INICIO ***************************************************************************/
 
 createItemBtn$.addEventListener("click", () => {
-  const value = inputCreate$.value.trim();
+  const value = inputText$.value.trim();
   if (value.length < 5) return;
   createTodo(value);
-  inputCreate$.value = "";
+  inputText$.value = "";
   createItemBtn$.disabled = true;
-  errorSpan.classList.remove("error-span--visible");
+  // errorSpan$.classList.remove("error-span--visible");
 });
 function createTodoTemplate(todo) {
   const li = document.createElement("li");
@@ -190,7 +190,8 @@ function createTodo(description) {
   const todo = { id, description: limitedDescription, checked: false };
   todos.push(todo);
   saveTodosToTheStorage();
-  applyFilters();
+  listOfTodo$.innerHTML = "";
+  createTodosinView(todos);
 }
 
 /******* FUNÇÃO PARA FILTRAR TODOS (PELA PALAVRA)***********************************************************/
@@ -253,21 +254,28 @@ function createTodosinView(todo) {
 
 //   createTodosinView(todosView);
 // });
+let activeFilterBtn = btnFilterAll$;
+let btnFilterValue = "all";
+
+function toggleFilterButton(clickedBtn) {
+  activeFilterBtn.classList.remove("btn-filter-active");
+
+  clickedBtn.classList.add("btn-filter-active");
+
+  activeFilterBtn = clickedBtn;
+}
 
 function applyFilters() {
-  const searchValue = searchInput$.value.trim().toLowerCase();
-  const selectValue = filterDropdown$.value;
+  const searchValue = inputText$.value.trim().toLowerCase();
   let filteredTodos = todos;
 
-  if (searchValue) {
-    filteredTodos = filteredTodos.filter((todo) =>
-      todo.description.toLowerCase().includes(searchValue)
-    );
-  }
+  filteredTodos = filteredTodos.filter((todo) =>
+    todo.description.toLowerCase().includes(searchValue)
+  );
 
-  if (selectValue === "completed") {
+  if (btnFilterValue === "done") {
     filteredTodos = filteredTodos.filter((todo) => todo.checked === true);
-  } else if (selectValue === "incomplete") {
+  } else if (btnFilterValue === "pending") {
     filteredTodos = filteredTodos.filter((todo) => todo.checked === false);
   }
 
@@ -281,15 +289,24 @@ function applyFilters() {
     errorSpanSearch.classList.remove("error-span-visible");
   }
 }
+searchWord$.addEventListener("click", applyFilters);
 
-searchInput$.addEventListener("input", applyFilters);
+btnFilterAll$.addEventListener("click", () => {
+  btnFilterValue = "all";
+  toggleFilterButton(btnFilterAll$);
+  console.log(btnFilterValue);
+});
 
-filterDropdown$.addEventListener("change", applyFilters);
+btnFilterPending$.addEventListener("click", () => {
+  btnFilterValue = "pending";
+  toggleFilterButton(btnFilterPending$);
+  console.log(btnFilterValue);
+});
 
-searchInput$.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    applyFilters();
-  }
+btnFilterDone$.addEventListener("click", () => {
+  btnFilterValue = "done";
+  toggleFilterButton(btnFilterDone$);
+  console.log(btnFilterValue);
 });
 
 /******* FUNÇÃO PARA ATUALIZAR TODOS***********************************************************/
@@ -298,9 +315,9 @@ function updateTodoStatus(checked, id) {
   todos.forEach((todo) => {
     if (todo.id == id) {
       todo.checked = checked;
+      saveTodosToTheStorage();
     }
   });
-  saveTodosToTheStorage();
   applyFilters();
 }
 
