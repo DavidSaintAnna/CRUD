@@ -15,6 +15,7 @@
   --silver--sand: hsla(181, 100%, 97%, 1);
   --emerald: hsl(170, 50%, 75%);
   --cyan-green: hsla(180, 39%, 82%, 0.2);
+  --orange-white: hsla(11, 50%, 91%, 1);
   --tree-cyan: hsla(180, 39%, 82%, 1);
   --orange: hsla(21, 96%, 43%, 1);
   --delete: hsl(48, 93%, 53%);
@@ -178,12 +179,12 @@ form {
   max-height: 50vh;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 40px;
   overflow: auto;
 }
 
 .todo-item {
-  background: var(--emerald);
+  background: var(--orange-white);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -193,7 +194,7 @@ form {
   font-size: 18px;
   font-weight: 800;
   box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.25);
-  color: var(--silver--tree);
+  color: var(--orange);
 }
 
 .todo-item-content.editing {
@@ -233,6 +234,15 @@ form {
   font-size: 60px;
   color: var(--delete);
 }
+
+.fa-check-circle {
+  color: var(--emerald);
+}
+
+.fa-stop-circle {
+  color: var(--orange);
+}
+
 .modal > h2 {
   margin-top: 10px;
 }
@@ -258,4 +268,23 @@ form {
 
 .error-span-visible {
   display: block;
+}
+
+.task-completed {
+  background-color: var(--emerald);
+  color: var(--silver--tree);
+}
+
+.todo-item.task-completed .todo-item-content {
+  text-decoration: line-through;
+}
+
+.fa-stop-circle {
+  font-size: 20px;
+  color: var(--red);
+}
+.fa-check-circle,
+.fa-stop-circle {
+  text-decoration: none; /* Prevents underline */
+  font-style: normal; /* Ensures it doesn’t get italicized */
 }
