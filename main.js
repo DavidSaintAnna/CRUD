@@ -73,47 +73,94 @@ createItemBtn$.addEventListener("click", () => {
   createItemBtn$.disabled = true;
   // errorSpan$.classList.remove("error-span--visible");
 });
+
+// function createTodoTemplate(todo) {
+//   const li = document.createElement("li");
+//   li.classList.add("todo-item");
+//   li.setAttribute("id", todo.id);
+//   if (todo.checked) {
+//     li.classList.add("task-completed");
+//   }
+//   const divGroup = document.createElement("div");
+//   divGroup.classList.add("todo-item-group");
+//   const input = document.createElement("input");
+//   input.setAttribute("type", "checkbox");
+//   if (todo.checked) input.setAttribute("checked", todo.checked);
+//   const spanDescription = document.createElement("span");
+//   spanDescription.classList.add("todo-item-content");
+//   spanDescription.appendChild(document.createTextNode(todo.description));
+//   const divItems = document.createElement("div");
+//   const penIcon = document.createElement("i");
+//   penIcon.classList.add("fa-solid", "fa-pen");
+//   const trashIcon = document.createElement("i");
+//   trashIcon.classList.add("fa-solid", "fa-trash");
+//   divGroup.appendChild(input);
+//   divGroup.appendChild(spanDescription);
+//   divItems.appendChild(penIcon);
+//   divItems.appendChild(trashIcon);
+//   li.appendChild(divGroup);
+//   li.appendChild(divItems);
+//   //sempre de dentro pra fora no append
+
+//   //input checkbox
+//   input.addEventListener("input", (event) => {
+//     const checked = event.target.checked;
+//     const id = event.target.parentElement.parentElement.id;
+//     updateTodoStatus(checked, id);
+//   });
+
+// //icone lixeira
+// trashIcon.addEventListener("click", (event) => {
+//   const todoElement = event.target.parentElement.parentElement;
+//   const todoId = todoElement.id;
+//   const index = todos.findIndex((todo) => todo.id == todoId);
+//   todos.splice(index, 1);
+//   saveTodosToTheStorage();
+//   todoElement.remove();
+// });
+
 function createTodoTemplate(todo) {
   const li = document.createElement("li");
   li.classList.add("todo-item");
   li.setAttribute("id", todo.id);
+  if (todo.checked) {
+    li.classList.add("task-completed");
+  }
+
   const divGroup = document.createElement("div");
   divGroup.classList.add("todo-item-group");
-  const input = document.createElement("input");
-  input.setAttribute("type", "checkbox");
-  if (todo.checked) input.setAttribute("checked", todo.checked);
+
+  const statusIcon = document.createElement("i");
+  statusIcon.classList.add(
+    "fa",
+    todo.checked ? "fa-circle-check" : "fa-stop-circle"
+  );
+  statusIcon.style.cursor = "pointer";
+
   const spanDescription = document.createElement("span");
   spanDescription.classList.add("todo-item-content");
   spanDescription.appendChild(document.createTextNode(todo.description));
+
   const divItems = document.createElement("div");
   const penIcon = document.createElement("i");
   penIcon.classList.add("fa-solid", "fa-pen");
   const trashIcon = document.createElement("i");
   trashIcon.classList.add("fa-solid", "fa-trash");
-  divGroup.appendChild(input);
+
+  divGroup.appendChild(statusIcon);
   divGroup.appendChild(spanDescription);
   divItems.appendChild(penIcon);
   divItems.appendChild(trashIcon);
   li.appendChild(divGroup);
   li.appendChild(divItems);
-  //sempre de dentro pra fora no append
 
-  //input checkbox
-  input.addEventListener("input", (event) => {
-    const checked = event.target.checked;
-    const id = event.target.parentElement.parentElement.id;
-    updateTodoStatus(checked, id);
+  statusIcon.addEventListener("click", () => {
+    const newCheckedState = !todo.checked;
+    updateTodoStatus(newCheckedState, todo.id);
+
+    statusIcon.classList.toggle("fa-circle-check", newCheckedState);
+    statusIcon.classList.toggle("fa-stop-circle", !newCheckedState);
   });
-
-  // //icone lixeira
-  // trashIcon.addEventListener("click", (event) => {
-  //   const todoElement = event.target.parentElement.parentElement;
-  //   const todoId = todoElement.id;
-  //   const index = todos.findIndex((todo) => todo.id == todoId);
-  //   todos.splice(index, 1);
-  //   saveTodosToTheStorage();
-  //   todoElement.remove();
-  // });
 
   let todoToDelete = null;
 
