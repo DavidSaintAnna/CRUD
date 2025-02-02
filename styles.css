@@ -180,6 +180,7 @@ form {
   display: flex;
   flex-direction: column;
   gap: 40px;
+  padding: 20px 10px;
   overflow: auto;
 }
 
@@ -285,6 +286,6 @@ form {
 }
 .fa-check-circle,
 .fa-stop-circle {
-  text-decoration: none; /* Prevents underline */
-  font-style: normal; /* Ensures it doesn’t get italicized */
+  text-decoration: none;
+  font-style: normal;
 }
