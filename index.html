@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
     <link
@@ -32,41 +32,35 @@
   </head>
   <body>
     <header>
-      <h1>Todo List</h1>
+      <h1>My to-do list</h1>
     </header>
 
     <main>
       <form>
-        <label>
+        <section class="input-buttons">
           <input
             type="text"
-            id="create"
+            id="input-text"
             name="todo"
-            placeholder="Create..."
+            placeholder="Add new task"
             class="create-input"
           />
-        </label>
-        <button id="create-item" class="create-item" type="button" disabled>
-          Add
-        </button>
+          <button id="create-item" class="action-icons" type="button" disabled>
+            <i class="fa-solid fa-plus"></i>
+          </button>
+          <button id="search-word" class="action-icons" type="button" disabled>
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </section>
+        <span id="error-span"></span>
+        <section id="filter-buttons" class="filter-buttons">
+          <button id="all" class="filter-button" type="button">All</button>
+          <button id="pending" class="filter-button" type="button">
+            Pending
+          </button>
+          <button id="done" class="filter-button" type="button">Done</button>
+        </section>
       </form>
-
-      <section>
-        <div class="search-container">
-          <input
-            type="text"
-            placeholder="Search..."
-            id="filter-input"
-            class="filter-input"
-          />
-          <button id="search-word" class="search-word"></button>
-        </div>
-        <select id="filter-dropdown" class="filter-dropdown">
-          <option value="all">All</option>
-          <option value="completed">Completed</option>
-          <option value="incomplete">Incomplete</option>
-        </select>
-      </section>
       <ul id="content" class="content"></ul>
       <div class="modal-container" id="modal">
         <div class="modal">
