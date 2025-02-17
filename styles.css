@@ -54,6 +54,14 @@ header {
   height: 100px;
 }
 
+form {
+  width: 100%;
+  height: 154px;
+  border: 1px solid var(--silver--tree);
+  border-radius: 8px;
+  padding: 20px;
+}
+
 .modal-container {
   display: none;
   position: fixed;
@@ -98,14 +106,6 @@ header {
 .confirm-delete {
   background: var(--delete);
   color: var(--white);
-}
-
-form {
-  width: 100%;
-  height: 154px;
-  border: 1px solid var(--silver--tree);
-  border-radius: 8px;
-  padding: 20px;
 }
 
 .input-buttons {

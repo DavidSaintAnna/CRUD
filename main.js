@@ -1,4 +1,6 @@
 /******* CONSTANTES ***************************************************************************/
+const API_URL = "https://delpe-todo.onrender.com/";
+const token = localStorage.getItem("token");
 
 const inputText$ = document.getElementById("input-text");
 const createItemBtn$ = document.getElementById("create-item");
@@ -24,17 +26,6 @@ errorSpanSearch.classList.add("error-span-content");
 errorSpan$.parentElement.parentElement.appendChild(errorSpanSearch);
 
 const todos = JSON.parse(localStorage.getItem("todos")) || [];
-
-function saveTodosToTheStorage() {
-  localStorage.setItem("todos", JSON.stringify(todos));
-}
-
-function loadTodosFromStorage() {
-  const storedTodos = JSON.parse(localStorage.getItem("todos")) || [];
-  todos.length = 0;
-  todos.push(...storedTodos);
-  createTodosinView(todos);
-}
 
 /******* FUNÇÃO PARA HABILITAR CRIAÇÃO DO tODO ********************************************************************/
 inputText$.addEventListener("input", () => {
@@ -74,51 +65,6 @@ createItemBtn$.addEventListener("click", () => {
   // errorSpan$.classList.remove("error-span--visible");
 });
 
-// function createTodoTemplate(todo) {
-//   const li = document.createElement("li");
-//   li.classList.add("todo-item");
-//   li.setAttribute("id", todo.id);
-//   if (todo.checked) {
-//     li.classList.add("task-completed");
-//   }
-//   const divGroup = document.createElement("div");
-//   divGroup.classList.add("todo-item-group");
-//   const input = document.createElement("input");
-//   input.setAttribute("type", "checkbox");
-//   if (todo.checked) input.setAttribute("checked", todo.checked);
-//   const spanDescription = document.createElement("span");
-//   spanDescription.classList.add("todo-item-content");
-//   spanDescription.appendChild(document.createTextNode(todo.description));
-//   const divItems = document.createElement("div");
-//   const penIcon = document.createElement("i");
-//   penIcon.classList.add("fa-solid", "fa-pen");
-//   const trashIcon = document.createElement("i");
-//   trashIcon.classList.add("fa-solid", "fa-trash");
-//   divGroup.appendChild(input);
-//   divGroup.appendChild(spanDescription);
-//   divItems.appendChild(penIcon);
-//   divItems.appendChild(trashIcon);
-//   li.appendChild(divGroup);
-//   li.appendChild(divItems);
-//   //sempre de dentro pra fora no append
-
-//   //input checkbox
-//   input.addEventListener("input", (event) => {
-//     const checked = event.target.checked;
-//     const id = event.target.parentElement.parentElement.id;
-//     updateTodoStatus(checked, id);
-//   });
-
-// //icone lixeira
-// trashIcon.addEventListener("click", (event) => {
-//   const todoElement = event.target.parentElement.parentElement;
-//   const todoId = todoElement.id;
-//   const index = todos.findIndex((todo) => todo.id == todoId);
-//   todos.splice(index, 1);
-//   saveTodosToTheStorage();
-//   todoElement.remove();
-// });
-
 function createTodoTemplate(todo) {
   const li = document.createElement("li");
   li.classList.add("todo-item");
@@ -155,8 +101,8 @@ function createTodoTemplate(todo) {
   li.appendChild(divItems);
 
   statusIcon.addEventListener("click", () => {
-    const newCheckedState = !todo.checked;
-    updateTodoStatus(newCheckedState, todo.id);
+    const newCheckedState = !todo.done;
+    updateStatusTodo(todo.id, newCheckedState, todo.description);
 
     statusIcon.classList.toggle("fa-circle-check", newCheckedState);
     statusIcon.classList.toggle("fa-stop-circle", !newCheckedState);
@@ -181,7 +127,6 @@ function createTodoTemplate(todo) {
       const todoId = todoToDelete.id;
       const index = todos.findIndex((todo) => todo.id == todoId);
       todos.splice(index, 1);
-      saveTodosToTheStorage();
       todoToDelete.remove();
       modalContainer$.style.display = "none";
       todoToDelete = null;
@@ -216,7 +161,7 @@ function createTodoTemplate(todo) {
         if (todo) {
           todo.description = limitedValue;
           todoContent.textContent = limitedValue;
-          saveTodosToTheStorage();
+          // saveTodosToTheStorage();
         }
         iconCheck.classList.remove("fa-check");
         iconCheck.classList.add("fa-pen");
@@ -231,76 +176,62 @@ function createTodoTemplate(todo) {
   return li;
 }
 
-function createTodo(description) {
-  const limitedDescription = description.slice(0, 19);
-  const id = todos.length + 1;
-  const todo = { id, description: limitedDescription, checked: false };
-  todos.push(todo);
-  saveTodosToTheStorage();
-  listOfTodo$.innerHTML = "";
-  createTodosinView(todos);
+function getTodos() {
+  fetch(`${API_URL}task`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((resp) => {
+      if (!resp.ok) {
+        throw new Error(`Error ${resp.status}: ${resp.statusText}`);
+      }
+      return resp.json();
+    })
+    .then((json) => {
+      console.log("API Response:", json);
+      const getTodos = json;
+      createTodosinView(getTodos);
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
 }
 
-/******* FUNÇÃO PARA FILTRAR TODOS (PELA PALAVRA)***********************************************************/
-
-// searchWord$.addEventListener("click", () => {
-//   const searchValue = searchInput$.value.trim().toLowerCase();
-//   const filteredTodos = todos.filter((todo) =>
-//     todo.description.toLowerCase().includes(searchValue)
-//   );
-
-//   listOfTodo$.innerHTML = "";
-
-//   filteredTodos.forEach((todo) => {
-//     const todoElement = createTodoTemplate(todo);
-//     listOfTodo$.appendChild(todoElement);
-//   });
-//   console.log(filteredTodos);
-// });
-
-// searchInput$.addEventListener("input", () => {
-//   const searchValue = searchInput$.value.trim().toLowerCase();
-//   const filteredTodos = todos.filter((todo) =>
-//     todo.description.toLowerCase().includes(searchValue)
-//   );
-
-//   if (filteredTodos.length === 0) {
-//     errorSpan.textContent = "No words found!";
-//     errorSpan.style.display = "block";
-//     errorSpan.style.marginTop = "90px";
-//   } else {
-//     errorSpan.style.display = "none";
-//   }
-// });
-
-// searchInput$.addEventListener("keydown", (event) => {
-//   if (event.key === "Enter") {
-//     searchWord$.click();
-//   }
-// });
+function createTodo(description) {
+  fetch(`${API_URL}task`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      description,
+    }),
+  })
+    .then((resp) => {
+      if (!resp.ok) {
+        throw new Error(`Error ${resp.status}: ${resp.statusText}`);
+      }
+      getTodos();
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+}
 
 // /******* FUNÇÃO PARA FILTRAR TODOS (PELO STATUS)***********************************************************/
+
 function createTodosinView(todo) {
+  listOfTodo$.innerHTML = "";
   todo.forEach((todo) => {
     const todoElement = createTodoTemplate(todo);
     listOfTodo$.appendChild(todoElement);
   });
 }
 
-// filterDropdown$.addEventListener("change", (event) => {
-//   const selectValue = event.target.value;
-//   let todosView = todos;
-//   listOfTodo$.innerHTML = "";
-
-//   if (selectValue === "completed") {
-//     todosView = todos.filter((todo) => todo.checked === true);
-//   }
-//   if (selectValue === "incomplete") {
-//     todosView = todos.filter((todo) => todo.checked === false);
-//   }
-
-//   createTodosinView(todosView);
-// });
 let activeFilterBtn = btnFilterAll$;
 let btnFilterValue = "all";
 
@@ -358,14 +289,14 @@ btnFilterDone$.addEventListener("click", () => {
 
 /******* FUNÇÃO PARA ATUALIZAR TODOS***********************************************************/
 
-function updateTodoStatus(checked, id) {
-  todos.forEach((todo) => {
-    if (todo.id == id) {
-      todo.checked = checked;
-      saveTodosToTheStorage();
-    }
-  });
-  applyFilters();
-}
+// function updateTodoStatus(checked, id) {
+//   todos.forEach((todo) => {
+//     if (todo.id == id) {
+//       todo.checked = checked;
+//       saveTodosToTheStorage();
+//     }
+//   });
+//   applyFilters();
+// }
 
-loadTodosFromStorage();
+getTodos();
