@@ -26,54 +26,37 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
-
-    <link rel="stylesheet" href="styles.css" />
-    <title>Todo App</title>
+    <link rel="stylesheet" href="login.css" />
+    <title>Login</title>
   </head>
   <body>
-    <header>
-      <h1>My to-do list</h1>
-    </header>
-
     <main>
+      <header>
+        <i class="fa-solid fa-user"></i>
+        <h1>Login</h1>
+      </header>
       <form>
-        <section class="input-buttons">
+        <div class="form-items">
+          <label for="email">Email</label>
           <input
-            type="text"
-            id="input-text"
-            name="todo"
-            placeholder="Add new task"
-            class="create-input"
+            type="email"
+            placeholder="Email"
+            name="email"
+            data-js="email"
+            required
           />
-          <button id="create-item" class="action-icons" type="button" disabled>
-            <i class="fa-solid fa-plus"></i>
-          </button>
-          <button id="search-word" class="action-icons" type="button" disabled>
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </section>
-        <span id="error-span"></span>
-        <section id="filter-buttons" class="filter-buttons">
-          <button id="all" class="filter-button" type="button">All</button>
-          <button id="pending" class="filter-button" type="button">
-            Pending
-          </button>
-          <button id="done" class="filter-button" type="button">Done</button>
-        </section>
-      </form>
-      <ul id="content" class="content"></ul>
-      <div class="modal-container" id="modal">
-        <div class="modal">
-          <i class="fa-solid fa-circle-exclamation"></i>
-          <h2>Confirm Delete</h2>
-          <p>Are you sure you want to delete this todo?</p>
-          <div class="modal-buttons">
-            <button id="cancel-delete" class="cancel-delete">Cancel</button>
-            <button id="confirm-delete" class="confirm-delete">Delete</button>
-          </div>
+          <label for="password">Password</label>
+          <input
+            type="password"
+            placeholder="Enter password"
+            name="password"
+            data-js="password"
+            required
+          />
+          <button data-js="login-button" type="submit">Enter</button>
         </div>
-      </div>
+      </form>
     </main>
-    <script src="/main.js"></script>
+    <script src="/auth.js"></script>
   </body>
 </html>
