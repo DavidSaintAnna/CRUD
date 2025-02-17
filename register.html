@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/icons8-list-32.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+      integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link rel="stylesheet" href="register.css" />
+  </head>
+  <body>
+    <main>
+      <i class="fa-solid fa-list"></i>
+      <h1>Create Account</h1>
+      <form>
+        <div class="form-items">
+          <label for="firstName">FirstName</label>
+          <input
+            type="text"
+            placeholder="Enter firstname"
+            name="firstName"
+            data-js="first-name"
+            required
+          />
+          <label for="lastName">LastName</label>
+          <input
+            type="text"
+            placeholder="Enter lastname"
+            name="lastName"
+            data-js="last-name"
+            required
+          />
+          <label for="role">Role</label>
+          <select data-js="role" required>
+            <option value="" disabled selected>Select Role</option>
+            <option value="GERENTE">Gerente</option>
+            <option value="DEV">Dev</option>
+            <option value="CLIENTE">Cliente</option>
+          </select>
+
+          <label for="Email">Email</label>
+          <input
+            type="email"
+            placeholder="Enter email"
+            name="email"
+            data-js="email"
+            required
+          />
+          <label for="password">Password</label>
+          <input
+            type="password"
+            placeholder="Enter password"
+            name="password"
+            data-js="password"
+            required
+          />
+
+          <button type="submit" data-js="register-button">Register</button>
+        </div>
+        <div class="modal-container" data-js="modal-container">
+          <div class="modal">
+            <i class="fa-regular fa-circle-check"></i>
+            <h2>Success</h2>
+            <p>You have sucessfully created a user!</p>
+            <button data-js="confirm-button" class="confirm-button">OK</button>
+          </div>
+        </div>
+        <footer>
+          <p>Already have an account? <a href="login.html">Log in</a>.</p>
+        </footer>
+      </form>
+    </main>
+    <script src="auth.js"></script>
+  </body>
+</html>
