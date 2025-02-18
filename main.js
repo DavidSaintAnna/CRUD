@@ -102,10 +102,7 @@ function createTodoTemplate(todo) {
 
   statusIcon.addEventListener("click", () => {
     const newCheckedState = !todo.done;
-    updateStatusTodo(todo.id, newCheckedState, todo.description);
-
-    statusIcon.classList.toggle("fa-circle-check", newCheckedState);
-    statusIcon.classList.toggle("fa-stop-circle", !newCheckedState);
+    updateStatusTodo(todo.id, newCheckedState);
   });
 
   let todoToDelete = null;
@@ -216,6 +213,43 @@ function createTodo(description) {
         throw new Error(`Error ${resp.status}: ${resp.statusText}`);
       }
       getTodos();
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+}
+
+function updateStatusTodo(todoId, newStatus) {
+  fetch(`${API_URL}task/${todoId}/done`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      done: newStatus,
+    }),
+  })
+    .then((resp) => {
+      if (!resp.ok) {
+        throw new Error(`Error ${resp.status}:${resp.statusText}`);
+      }
+      return resp.json();
+    })
+    .then((updatedTodo) => {
+      const todoElement = document.getElementById(todoId);
+      if (todoElement) {
+        const statusIcon = todoElement.querySelector(".fa");
+        statusIcon.classList.remove("fa-circle-check", "fa-stop-circle");
+        statusIcon.classList.add(
+          updatedTodo.done ? "fa-circle-check" : "fa-stop-circle"
+        );
+        if (updatedTodo.done) {
+          todoElement.classList.add("task-completed");
+        } else {
+          todoElement.classList.remove("task-completed");
+        }
+      }
     })
     .catch((error) => {
       console.log(error.message);
