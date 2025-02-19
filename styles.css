@@ -221,6 +221,7 @@ form {
 .todo-item-group {
   width: 25%;
   display: flex;
+  align-items: center;
   gap: 15px;
 }
 
@@ -283,6 +284,10 @@ form {
 
 .todo-item.task-completed .todo-item-content {
   text-decoration: line-through;
+}
+
+.fa-circle-check {
+  font-size: 20px;
 }
 
 .fa-stop-circle {
