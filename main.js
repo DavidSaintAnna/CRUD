@@ -69,7 +69,7 @@ function createTodoTemplate(todo) {
   const li = document.createElement("li");
   li.classList.add("todo-item");
   li.setAttribute("id", todo.id);
-  if (todo.checked) {
+  if (todo.done) {
     li.classList.add("task-completed");
   }
 
@@ -79,7 +79,7 @@ function createTodoTemplate(todo) {
   const statusIcon = document.createElement("i");
   statusIcon.classList.add(
     "fa",
-    todo.checked ? "fa-circle-check" : "fa-stop-circle"
+    todo.done ? "fa-circle-check" : "fa-stop-circle"
   );
   statusIcon.style.cursor = "pointer";
 
