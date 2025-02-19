@@ -33,6 +33,7 @@ body {
   height: 100%;
   background-color: var(--silver--sand);
   font-family: "Roboto", serif;
+  overflow: hidden;
 }
 
 main {
