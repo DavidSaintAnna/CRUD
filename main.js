@@ -250,6 +250,7 @@ function updateStatusTodo(todoId, newStatus) {
           todoElement.classList.remove("task-completed");
         }
       }
+      showToast();
     })
     .catch((error) => {
       console.log(error.message);
@@ -320,6 +321,16 @@ btnFilterDone$.addEventListener("click", () => {
   toggleFilterButton(btnFilterDone$);
   console.log(btnFilterValue);
 });
+
+function showToast() {
+  const toast = document.querySelector(".toast");
+
+  toast.classList.add("show-toast");
+
+  setTimeout(() => {
+    toast.classList.remove("show-toast");
+  }, 2000);
+}
 
 /******* FUNÇÃO PARA ATUALIZAR TODOS***********************************************************/
 

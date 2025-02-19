@@ -23,6 +23,9 @@
   --gray: hsl(0, 0%, 80%);
   --cancel: hsl(0, 0%, 38%);
   --black: hsl(210, 29%, 25%);
+  --color-for-toast-text: hsl(0, 0%, 40%, 1);
+  --color-for-toast-text-2: hsl(0, 0%, 20%);
+  --color-for-toast: hsl(0, 0%, 87%);
 }
 
 body {
@@ -290,4 +293,56 @@ form {
 .fa-stop-circle {
   text-decoration: none;
   font-style: normal;
+}
+
+.toast {
+  display: none;
+  position: absolute;
+  width: 350px;
+  top: 229px;
+  right: 13px;
+  border-radius: 12px;
+  background: var(--white);
+  padding: 20px 28px 16px 27px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  border-left: 6px solid var(--silver--tree);
+  overflow: hidden;
+}
+
+.toast .toast-content {
+  display: flex;
+  align-items: center;
+}
+
+.toast-content .check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 35px;
+  width: 35px;
+  background-color: var(--emerald);
+  color: var(--white);
+  font-size: 20px;
+  border-radius: 50%;
+}
+
+.toast-content .message {
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
+}
+
+.message .text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-for-toast-text);
+}
+
+.message .text.text-1 {
+  font-weight: 600;
+  color: var(--color-for-toast-text-2);
+}
+
+.show-toast {
+  display: block;
 }
