@@ -218,6 +218,7 @@ form {
 .todo-item-group {
   width: 25%;
   display: flex;
+  align-items: center;
   gap: 15px;
 }
 
@@ -285,6 +286,9 @@ form {
 .fa-stop-circle {
   font-size: 20px;
   color: var(--red);
+}
+.fa-circle-check {
+  font-size: 20px;
 }
 .fa-check-circle,
 .fa-stop-circle {
