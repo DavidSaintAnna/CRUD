@@ -15,6 +15,11 @@ const confirmDelete$ = document.getElementById("confirm-delete");
 const errorSpan$ = document.getElementById("error-span");
 const form$ = document.querySelector("form");
 
+function getUserRole() {
+  const userRole = localStorage.getItem("userData");
+  console.log(userRole);
+}
+
 form$.addEventListener("submit", (event) => {
   event.preventDefault();
 });
@@ -345,3 +350,4 @@ function showToast() {
 // }
 
 getTodos();
+getUserRole();
