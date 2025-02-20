@@ -144,7 +144,6 @@ form {
   border-radius: 8px;
   margin-top: 20px;
   gap: 5px;
-  cursor: pointer;
 }
 
 .filter-button:nth-child(1) {
@@ -162,6 +161,7 @@ form {
   font-size: 1.6rem;
   font-weight: 600;
   background-color: var(--tree-cyan);
+  cursor: pointer;
 }
 
 .create-input::placeholder {
