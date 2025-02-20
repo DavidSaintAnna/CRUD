@@ -164,6 +164,7 @@ form {
   font-size: 1.6rem;
   font-weight: 600;
   background-color: var(--tree-cyan);
+  cursor: pointer;
 }
 
 .create-input::placeholder {
@@ -188,6 +189,20 @@ form {
   gap: 40px;
   padding: 20px 10px;
   overflow: auto;
+}
+
+.content::-webkit-scrollbar {
+  width: 1em;
+}
+
+.content::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.content::-webkit-scrollbar-thumb {
+  background-color: var(--silver--tree);
+  outline: 1px solid var(--silver--sand);
+  border-radius: 3px;
 }
 
 .todo-item {
