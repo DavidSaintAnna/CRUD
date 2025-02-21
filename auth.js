@@ -18,9 +18,56 @@ form$.addEventListener("submit", (event) => {
   event.preventDefault();
 });
 
+function parseJwt(token) {
+  try {
+    const base64Url = token.split(".")[1];
+
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error("Error parsing JWT:", error);
+    return null;
+  }
+}
+
+function getUserDetails(email) {
+  const token = localStorage.getItem("token");
+
+  fetch(`${API_URL}users`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((users) => {
+      const currentUser = users.find((user) => user.email === email);
+      console.log("User details:", currentUser);
+      console.log("Access Level:", currentUser.accessLevel);
+      localStorage.setItem("userData", JSON.stringify(currentUser));
+      window.location.href = "todo.html";
+    })
+    .catch((error) => console.error("Error fetching user:", error));
+}
+
 function login() {
   const email = emailInput$.value;
   const password = passwordInput$.value;
+
+  loginButton$.disabled = true;
 
   fetch(`${API_URL}auth/login`, {
     method: "POST",
@@ -40,9 +87,12 @@ function login() {
     })
     .then((responseData) => {
       localStorage.setItem("token", responseData.token);
-      window.location.href = "todo.html";
+      const decodedToken = parseJwt(responseData.token);
+      getUserDetails(decodedToken.sub);
+      loginButton$.disabled = false;
     })
     .catch((error) => {
+      loginButton$.disabled = false;
       console.log(error.message);
     });
 }
