@@ -16,8 +16,18 @@ const errorSpan$ = document.getElementById("error-span");
 const form$ = document.querySelector("form");
 
 function getUserRole() {
-  const userRole = localStorage.getItem("userData");
-  console.log(userRole);
+  const userData = localStorage.getItem("userData");
+  const user = JSON.parse(userData);
+  return user.accessLevel;
+}
+
+function checkUserPermissions() {
+  const userRole = getUserRole();
+  if (userRole === "Cliente" || userRole === "Dev") {
+    inputText$.disabled = true;
+    inputText$.style.cursor = "not-allowed";
+    createItemBtn$.disabled = true;
+  }
 }
 
 form$.addEventListener("submit", (event) => {
@@ -62,6 +72,12 @@ inputText$.addEventListener("keydown", (event) => {
 /******* FUNÇÃO PARA CRIAR OS TODOS INICIO ***************************************************************************/
 
 createItemBtn$.addEventListener("click", () => {
+  const userRole = getUserRole();
+
+  if (userRole !== "Gerente") {
+    return;
+  }
+
   const value = inputText$.value.trim();
   if (value.length < 5) return;
   createTodo(value);
@@ -71,6 +87,7 @@ createItemBtn$.addEventListener("click", () => {
 });
 
 function createTodoTemplate(todo) {
+  const userRole = getUserRole();
   const li = document.createElement("li");
   li.classList.add("todo-item");
   li.setAttribute("id", todo.id);
@@ -105,10 +122,21 @@ function createTodoTemplate(todo) {
   li.appendChild(divGroup);
   li.appendChild(divItems);
 
-  statusIcon.addEventListener("click", () => {
-    const newCheckedState = !todo.done;
-    updateStatusTodo(todo.id, newCheckedState);
-  });
+  if (userRole === "Cliente") {
+    statusIcon.style.cursor = "not-allowed";
+    statusIcon.style.opacity = "0.5";
+  } else {
+    statusIcon.style.cursor = "pointer";
+    statusIcon.addEventListener("click", () => {
+      const newCheckedState = !todo.done;
+      updateStatusTodo(todo.id, newCheckedState);
+    });
+  }
+
+  // statusIcon.addEventListener("click", () => {
+  //   const newCheckedState = !todo.done;
+  //   updateStatusTodo(todo.id, newCheckedState);
+  // });
 
   let todoToDelete = null;
 
@@ -350,4 +378,4 @@ function showToast() {
 // }
 
 getTodos();
-getUserRole();
+checkUserPermissions();
