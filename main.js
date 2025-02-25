@@ -25,7 +25,7 @@ function checkUserPermissions() {
   const userRole = getUserRole();
   if (userRole === "Cliente" || userRole === "Dev") {
     inputText$.disabled = true;
-    inputText$.style.cursor = "not-allowed";
+    inputText$.classList.add("not-allowed");
     createItemBtn$.disabled = true;
   }
 }
@@ -105,6 +105,9 @@ function createTodoTemplate(todo) {
   );
   statusIcon.style.cursor = "pointer";
 
+  const idText = document.createElement("span");
+  idText.textContent = `#${todo.id}`;
+
   const spanDescription = document.createElement("span");
   spanDescription.classList.add("todo-item-content");
   spanDescription.appendChild(document.createTextNode(todo.description));
@@ -116,6 +119,7 @@ function createTodoTemplate(todo) {
   trashIcon.classList.add("fa-solid", "fa-trash");
 
   divGroup.appendChild(statusIcon);
+  divGroup.appendChild(idText);
   divGroup.appendChild(spanDescription);
   divItems.appendChild(penIcon);
   divItems.appendChild(trashIcon);
@@ -123,8 +127,7 @@ function createTodoTemplate(todo) {
   li.appendChild(divItems);
 
   if (userRole === "Cliente") {
-    statusIcon.style.cursor = "not-allowed";
-    statusIcon.style.opacity = "0.5";
+    statusIcon.classList.add("not-allowed");
   } else {
     statusIcon.style.cursor = "pointer";
     statusIcon.addEventListener("click", () => {
@@ -142,67 +145,65 @@ function createTodoTemplate(todo) {
 
   /******* MODAL E DELETE DOS TODOS***************************************************************************/
 
-  trashIcon.addEventListener("click", (event) => {
-    todoToDelete = event.target.parentElement.parentElement;
-    modalContainer$.style.display = "flex";
-  });
+  if (userRole === "Gerente") {
+    trashIcon.addEventListener("click", (event) => {
+      todoToDelete = event.target.parentElement.parentElement;
+      modalContainer$.style.display = "flex";
+    });
 
-  cancelDelete$.addEventListener("click", () => {
-    modalContainer$.style.display = "none";
-    todoToDelete = null;
-  });
-
-  confirmDelete$.addEventListener("click", () => {
-    if (todoToDelete) {
-      const todoId = todoToDelete.id;
-      const index = todos.findIndex((todo) => todo.id == todoId);
-      todos.splice(index, 1);
-      todoToDelete.remove();
+    cancelDelete$.addEventListener("click", () => {
       modalContainer$.style.display = "none";
       todoToDelete = null;
-    }
-  });
+    });
 
-  modalContainer$.addEventListener("click", (event) => {
-    if (event.target === modalContainer$) {
-      modalContainer$.style.display = "none";
-      todoToDelete = null;
-    }
-  });
-
-  //icone edição
-  penIcon.addEventListener("click", (event) => {
-    const todoElement = event.target.parentElement.parentElement;
-    const iconPen = todoElement.querySelector(".fa-pen");
-    const iconCheck = todoElement.querySelector(".fa-check");
-    const todoContent = todoElement.querySelector(".todo-item-content");
-    if (iconPen) {
-      iconPen.classList.remove("fa-pen");
-      iconPen.classList.add("fa-check");
-      todoContent.contentEditable = true;
-      todoContent.focus();
-      todoContent.classList.add("editing");
-    } else {
-      const newValue = todoContent.textContent.trim();
-      if (newValue.length >= 5) {
-        const limitedValue = newValue.slice(0, 19);
-        const todoId = todoElement.id;
-        const todo = todos.find((arrayElement) => arrayElement.id == todoId);
-        if (todo) {
-          todo.description = limitedValue;
-          todoContent.textContent = limitedValue;
-          // saveTodosToTheStorage();
-        }
-        iconCheck.classList.remove("fa-check");
-        iconCheck.classList.add("fa-pen");
-        todoContent.contentEditable = false;
-        todoContent.classList.remove("editing");
-      } else {
-        alert("Todo must be at least 5 characters long!");
-        todoContent.focus();
+    confirmDelete$.addEventListener("click", async () => {
+      if (todoToDelete) {
+        const todoId = todoToDelete.id;
+        deleteTodo(todoId);
+        modalContainer$.style.display = "none";
+        todoToDelete = null;
       }
-    }
-  });
+    });
+
+    modalContainer$.addEventListener("click", (event) => {
+      if (event.target === modalContainer$) {
+        modalContainer$.style.display = "none";
+        todoToDelete = null;
+      }
+    });
+
+    //icone edição
+    penIcon.addEventListener("click", (event) => {
+      const todoElement = event.target.parentElement.parentElement;
+      const iconPen = todoElement.querySelector(".fa-pen");
+      const iconCheck = todoElement.querySelector(".fa-check");
+      const todoContent = todoElement.querySelector(".todo-item-content");
+      if (iconPen) {
+        iconPen.classList.remove("fa-pen");
+        iconPen.classList.add("fa-check");
+        todoContent.contentEditable = true;
+        todoContent.focus();
+        todoContent.classList.add("editing");
+      } else {
+        const newValue = todoContent.textContent.trim();
+        if (newValue.length >= 5) {
+          const limitedValue = newValue.slice(0, 19);
+          const todoId = todoElement.id;
+          updateTodoDescription(todoId, limitedValue);
+          iconCheck.classList.remove("fa-check");
+          iconCheck.classList.add("fa-pen");
+          todoContent.contentEditable = false;
+          todoContent.classList.remove("editing");
+        } else {
+          alert("Todo must be at least 5 characters long!");
+          todoContent.focus();
+        }
+      }
+    });
+  } else {
+    trashIcon.classList.add("not-allowed");
+    penIcon.classList.add("not-allowed");
+  }
   return li;
 }
 
@@ -290,6 +291,49 @@ function updateStatusTodo(todoId, newStatus) {
     });
 }
 
+function deleteTodo(todoId) {
+  fetch(`${API_URL}task/${todoId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((resp) => {
+      if (!resp.ok) {
+        throw new Error(`Error ${resp.status}: ${resp.statusText}`);
+      }
+      const todoElement = document.getElementById(todoId);
+      if (todoElement) {
+        todoElement.remove();
+      }
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+}
+
+function updateTodoDescription(todoId, newDescription) {
+  fetch(`${API_URL}task/${todoId}/description`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      description: newDescription,
+    }),
+  })
+    .then((resp) => {
+      if (!resp.ok) {
+        throw new Error(`Error ${resp.status}: ${resp.statusText}`);
+      }
+      return resp.json();
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+}
 // /******* FUNÇÃO PARA FILTRAR TODOS (PELO STATUS)***********************************************************/
 
 function createTodosinView(todo) {
