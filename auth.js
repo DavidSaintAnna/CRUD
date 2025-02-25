@@ -37,32 +37,6 @@ function parseJwt(token) {
     return null;
   }
 }
-
-function getUserDetails(email) {
-  const token = localStorage.getItem("token");
-
-  fetch(`${API_URL}users`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Error ${response.status}: ${response.statusText}`);
-      }
-      return response.json();
-    })
-    .then((users) => {
-      const currentUser = users.find((user) => user.email === email);
-      console.log("User details:", currentUser);
-      console.log("Access Level:", currentUser.accessLevel);
-      localStorage.setItem("userData", JSON.stringify(currentUser));
-      window.location.href = "todo.html";
-    })
-    .catch((error) => console.error("Error fetching user:", error));
-}
-
 function login() {
   const email = emailInput$.value;
   const password = passwordInput$.value;
@@ -88,12 +62,20 @@ function login() {
     .then((responseData) => {
       localStorage.setItem("token", responseData.token);
       const decodedToken = parseJwt(responseData.token);
-      getUserDetails(decodedToken.sub);
-      loginButton$.disabled = false;
+
+      const userData = {
+        accessLevel: decodedToken.accessLevel,
+      };
+
+      localStorage.setItem("userData", JSON.stringify(userData));
+
+      window.location.href = "todo.html";
     })
     .catch((error) => {
-      loginButton$.disabled = false;
       console.log(error.message);
+    })
+    .finally(() => {
+      loginButton$.disabled = false;
     });
 }
 
