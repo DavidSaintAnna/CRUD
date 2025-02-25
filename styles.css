@@ -368,3 +368,8 @@ form {
 .show-toast {
   display: block;
 }
+
+.not-allowed {
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
