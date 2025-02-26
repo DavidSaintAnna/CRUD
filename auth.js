@@ -11,6 +11,8 @@ const confirmModalButton$ = document.querySelector(
   "[data-js='confirm-button']"
 );
 const modalContainer$ = document.querySelector("[data-js='modal-container']");
+const logoutButton$ = document.querySelector("[data-js='logout-button']");
+const backButton$ = document.querySelector("[data-js='back-button']");
 
 const form$ = document.querySelector("form");
 
@@ -20,9 +22,33 @@ form$.addEventListener("submit", (event) => {
 
 document.addEventListener("DOMContentLoaded", function () {
   if (window.location.href.includes("register.html")) {
+    checkTokenAuthentication();
     checkUserAccess();
   }
 });
+
+if (backButton$) {
+  backButton$.addEventListener("click", () => {
+    window.location.href = "todo.html";
+  });
+}
+
+if (logoutButton$) {
+  logoutButton$.addEventListener("click", function () {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userData");
+
+    window.location.href = "index.html";
+  });
+}
+
+function checkTokenAuthentication() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "index.html";
+    return;
+  }
+}
 
 function checkUserAccess() {
   const userData = localStorage.getItem("userData");

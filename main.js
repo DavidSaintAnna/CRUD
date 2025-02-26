@@ -14,7 +14,20 @@ const btnFilterDone$ = document.getElementById("done");
 const confirmDelete$ = document.getElementById("confirm-delete");
 const errorSpan$ = document.getElementById("error-span");
 const userButton$ = document.querySelector("[data-js='user-button']");
+const logoutButton$ = document.querySelector("[data-js='logout-button']");
 const form$ = document.querySelector("form");
+
+function checkTokenAuthentication() {
+  if (!token) {
+    window.location.href = "index.html";
+    return;
+  }
+}
+document.addEventListener("DOMContentLoaded", function () {
+  if (window.location.href.includes("todo.html")) {
+    checkTokenAuthentication();
+  }
+});
 
 function getUserRole() {
   const userData = localStorage.getItem("userData");
@@ -33,6 +46,13 @@ function checkUserPermissions() {
     createItemBtn$.disabled = true;
   }
 }
+
+logoutButton$.addEventListener("click", function () {
+  localStorage.removeItem("token");
+  localStorage.removeItem("userData");
+
+  window.location.href = "index.html";
+});
 
 userButton$.addEventListener("click", () => {
   window.location.href = "register.html";
