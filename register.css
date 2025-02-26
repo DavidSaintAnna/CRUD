@@ -154,7 +154,7 @@ footer {
 .back-button {
   position: absolute;
   top: 14px;
-  right: max(67px, calc(50% - 300px + 67px));
+  left: max(18px, calc(50% - 300px + 18px));
   width: 44px;
   height: 30px;
   border-radius: 5px;
