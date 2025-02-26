@@ -18,6 +18,21 @@ form$.addEventListener("submit", (event) => {
   event.preventDefault();
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+  if (window.location.href.includes("register.html")) {
+    checkUserAccess();
+  }
+});
+
+function checkUserAccess() {
+  const userData = localStorage.getItem("userData");
+  const user = JSON.parse(userData);
+  if (user.accessLevel !== "Gerente") {
+    window.location.href = "todo.html";
+    return;
+  }
+}
+
 function parseJwt(token) {
   try {
     const base64Url = token.split(".")[1];
@@ -85,6 +100,9 @@ function register() {
   const name = firstName$.value;
   const lastName = lastName$.value;
   const accessLevel = selectElement$.value;
+
+  registerButton$.disabled = true;
+
   fetch(`${API_URL}users`, {
     method: "POST",
     headers: {
@@ -111,6 +129,9 @@ function register() {
     })
     .catch((error) => {
       console.log(error.message);
+    })
+    .finally(() => {
+      registerButton$.disabled = false;
     });
 }
 
