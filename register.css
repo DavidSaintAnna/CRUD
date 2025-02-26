@@ -138,3 +138,27 @@ i.fa-circle-check {
 footer {
   margin-top: 60px;
 }
+
+.logout-button {
+  position: absolute;
+  top: 14px;
+  right: max(18px, calc(50% - 300px + 18px));
+  width: 44px;
+  height: 30px;
+  border-radius: 5px;
+  color: var(--orange);
+  background: none;
+  cursor: pointer;
+}
+
+.back-button {
+  position: absolute;
+  top: 14px;
+  right: max(67px, calc(50% - 300px + 67px));
+  width: 44px;
+  height: 30px;
+  border-radius: 5px;
+  color: var(--silver--tree);
+  background: none;
+  cursor: pointer;
+}

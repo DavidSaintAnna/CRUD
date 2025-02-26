@@ -384,6 +384,18 @@ form {
   cursor: pointer;
 }
 
+.logout-button {
+  position: absolute;
+  top: 14px;
+  right: max(67px, calc(50% - 300px + 67px));
+  width: 44px;
+  height: 30px;
+  border-radius: 5px;
+  color: var(--orange);
+  background: none;
+  cursor: pointer;
+}
+
 .hide {
   display: none;
 }
