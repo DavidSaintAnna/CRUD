@@ -79,22 +79,6 @@ function login() {
     });
 }
 
-// function register() {
-//   fetch("https://delpe-todo.onrender.com/users", {
-//     headers: {
-//       Authorization: `Bearer ${localStorage.getItem("token")}`,
-//     },
-//   })
-//     .then((resp) => {
-//       if (!resp.ok) {
-//         throw new Error(`Erro ${resp.status}: ${resp.statusText}`);
-//       }
-//       return resp.json();
-//     })
-//     .then((json) => console.log("Resposta:", json))
-//     .catch((error) => console.error("Erro na requisição:", error));
-// }
-
 function register() {
   const email = emailInput$.value;
   const password = passwordInput$.value;

@@ -13,6 +13,7 @@ const btnFilterPending$ = document.getElementById("pending");
 const btnFilterDone$ = document.getElementById("done");
 const confirmDelete$ = document.getElementById("confirm-delete");
 const errorSpan$ = document.getElementById("error-span");
+const userButton$ = document.querySelector("[data-js='user-button']");
 const form$ = document.querySelector("form");
 
 function getUserRole() {
@@ -23,12 +24,19 @@ function getUserRole() {
 
 function checkUserPermissions() {
   const userRole = getUserRole();
+  if (userRole === "Gerente") {
+    userButton$.classList.remove("hide");
+  }
   if (userRole === "Cliente" || userRole === "Dev") {
     inputText$.disabled = true;
     inputText$.classList.add("not-allowed");
     createItemBtn$.disabled = true;
   }
 }
+
+userButton$.addEventListener("click", () => {
+  window.location.href = "register.html";
+});
 
 form$.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -45,15 +53,16 @@ const todos = JSON.parse(localStorage.getItem("todos")) || [];
 /******* FUNÇÃO PARA HABILITAR CRIAÇÃO DO tODO ********************************************************************/
 inputText$.addEventListener("input", () => {
   const value = inputText$.value.trim();
-  createItemBtn$.disabled = value.length < 5;
+  createItemBtn$.disabled = value.length < 5 || value.length > 100;
   searchWord$.disabled = todos.length === 0;
 
   if (value.length < 5) {
     errorSpan$.textContent = "this field must have at least 5 characters!";
     errorSpan$.classList.add("error-span-visible");
-  } else if (value.length >= 19) {
+  } else if (value.length > 100) {
     errorSpan$.textContent = "limit of characters reached!";
     errorSpan$.classList.add("error-span-visible");
+    createItemBtn$.disabled = true;
   } else {
     errorSpan$.classList.remove("error-span-visible");
   }
@@ -79,11 +88,10 @@ createItemBtn$.addEventListener("click", () => {
   }
 
   const value = inputText$.value.trim();
-  if (value.length < 5) return;
+  if (value.length < 5 || value.length > 100) return;
   createTodo(value);
   inputText$.value = "";
   createItemBtn$.disabled = true;
-  // errorSpan$.classList.remove("error-span--visible");
 });
 
 function createTodoTemplate(todo) {
@@ -136,11 +144,6 @@ function createTodoTemplate(todo) {
     });
   }
 
-  // statusIcon.addEventListener("click", () => {
-  //   const newCheckedState = !todo.done;
-  //   updateStatusTodo(todo.id, newCheckedState);
-  // });
-
   let todoToDelete = null;
 
   /******* MODAL E DELETE DOS TODOS***************************************************************************/
@@ -186,16 +189,18 @@ function createTodoTemplate(todo) {
         todoContent.classList.add("editing");
       } else {
         const newValue = todoContent.textContent.trim();
-        if (newValue.length >= 5) {
-          const limitedValue = newValue.slice(0, 19);
+        if (newValue.length >= 5 && newValue.length <= 100) {
           const todoId = todoElement.id;
-          updateTodoDescription(todoId, limitedValue);
+          updateTodoDescription(todoId, newValue);
           iconCheck.classList.remove("fa-check");
           iconCheck.classList.add("fa-pen");
           todoContent.contentEditable = false;
           todoContent.classList.remove("editing");
-        } else {
+        } else if (newValue.length < 5) {
           alert("Todo must be at least 5 characters long!");
+          todoContent.focus();
+        } else {
+          alert("Todo cannot exceed 100 characters!");
           todoContent.focus();
         }
       }
@@ -334,7 +339,6 @@ function updateTodoDescription(todoId, newDescription) {
       console.log(error.message);
     });
 }
-// /******* FUNÇÃO PARA FILTRAR TODOS (PELO STATUS)***********************************************************/
 
 function createTodosinView(todo) {
   listOfTodo$.innerHTML = "";
@@ -343,6 +347,8 @@ function createTodosinView(todo) {
     listOfTodo$.appendChild(todoElement);
   });
 }
+
+// /******* FUNÇÃO PARA FILTRAR TODOS (PELO STATUS)***********************************************************/
 
 let activeFilterBtn = btnFilterAll$;
 let btnFilterValue = "all";
@@ -408,18 +414,6 @@ function showToast() {
     toast.classList.remove("show-toast");
   }, 2000);
 }
-
-/******* FUNÇÃO PARA ATUALIZAR TODOS***********************************************************/
-
-// function updateTodoStatus(checked, id) {
-//   todos.forEach((todo) => {
-//     if (todo.id == id) {
-//       todo.checked = checked;
-//       saveTodosToTheStorage();
-//     }
-//   });
-//   applyFilters();
-// }
 
 getTodos();
 checkUserPermissions();
