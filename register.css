@@ -139,10 +139,13 @@ footer {
   margin-top: 60px;
 }
 
+.buttons {
+  width: 290px;
+  display: flex;
+  justify-content: space-between;
+}
+
 .logout-button {
-  position: absolute;
-  top: 14px;
-  right: max(18px, calc(50% - 300px + 18px));
   width: 44px;
   height: 30px;
   border-radius: 5px;
@@ -152,9 +155,6 @@ footer {
 }
 
 .back-button {
-  position: absolute;
-  top: 14px;
-  left: max(18px, calc(50% - 300px + 18px));
   width: 44px;
   height: 30px;
   border-radius: 5px;
